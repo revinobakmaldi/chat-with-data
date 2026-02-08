@@ -42,8 +42,8 @@ export function SchemaSidebar({ schema }: SchemaSidebarProps) {
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      className={`shrink-0 border-r border-white/10 bg-white/[0.02] transition-all ${
-        collapsed ? "w-10" : "w-56"
+      className={`shrink-0 border-r border-white/10 bg-white/[0.02] transition-all duration-300 ${
+        collapsed ? "w-10" : tab === "preview" ? "w-1/2" : "w-56"
       }`}
     >
       <div className="flex items-center justify-between border-b border-white/10 px-3 py-2">
@@ -117,17 +117,17 @@ export function SchemaSidebar({ schema }: SchemaSidebarProps) {
               </div>
             </div>
           ) : (
-            <div className="overflow-x-auto p-2">
+            <div className="overflow-x-auto p-3">
               <table className="w-full text-xs">
                 <thead>
                   <tr className="border-b border-white/10">
-                    <th className="whitespace-nowrap px-1.5 py-1 text-left font-medium text-gray-500">
+                    <th className="whitespace-nowrap px-2 py-1.5 text-left font-medium text-gray-500">
                       #
                     </th>
                     {schema.columns.map((col) => (
                       <th
                         key={col.name}
-                        className="whitespace-nowrap px-1.5 py-1 text-left font-medium text-gray-400"
+                        className="whitespace-nowrap px-2 py-1.5 text-left font-medium text-gray-400"
                       >
                         {col.name}
                       </th>
@@ -140,13 +140,13 @@ export function SchemaSidebar({ schema }: SchemaSidebarProps) {
                       key={i}
                       className="border-b border-white/5 hover:bg-white/5"
                     >
-                      <td className="whitespace-nowrap px-1.5 py-1 text-gray-600">
+                      <td className="whitespace-nowrap px-2 py-1.5 text-gray-600">
                         {i + 1}
                       </td>
                       {schema.columns.map((col) => (
                         <td
                           key={col.name}
-                          className="max-w-[120px] truncate whitespace-nowrap px-1.5 py-1 text-gray-300"
+                          className="max-w-[200px] truncate whitespace-nowrap px-2 py-1.5 text-gray-300"
                           title={formatCellValue(row[col.name])}
                         >
                           {formatCellValue(row[col.name])}
@@ -156,7 +156,7 @@ export function SchemaSidebar({ schema }: SchemaSidebarProps) {
                   ))}
                 </tbody>
               </table>
-              <div className="mt-2 text-center text-[10px] text-gray-600">
+              <div className="mt-3 text-center text-[10px] text-gray-600">
                 Showing {schema.sampleRows.length} of {schema.rowCount} rows
               </div>
             </div>
