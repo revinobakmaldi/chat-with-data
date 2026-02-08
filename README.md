@@ -2,7 +2,7 @@
 
 Natural language SQL analytics tool. Upload a CSV, ask questions in plain English, and get SQL queries, results, and charts — all in the browser.
 
-**Live demo:** [chat-with-data.vercel.app](https://chat-with-data.vercel.app)
+**Live demo:** [chat-with-data-csv.vercel.app](https://chat-with-data-csv.vercel.app)
 
 ## How It Works
 
