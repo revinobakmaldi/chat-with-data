@@ -27,11 +27,13 @@ RULES:
 1. Return ONLY valid JSON with keys: sql, explanation, chart (optional)
 2. Use only SELECT statements (no INSERT/UPDATE/DELETE/DROP)
 3. Always query from "${schema.tableName}"
-4. For chart, specify: type (bar|line|pie|area), xKey, yKey, title
+4. For chart, specify: type (bar|line|pie|area|scatter|histogram), xKey, yKey, title
 5. Only suggest a chart when the data is suitable for visualization (aggregations, comparisons, trends)
+6. Use scatter for correlation between two numeric columns (both xKey and yKey must be numeric)
+7. Use histogram for distribution of a single numeric column — write SQL with WIDTH_BUCKET to bin values, use the bin label as xKey and count as yKey
 6. Keep SQL concise and readable
-7. Limit results to 100 rows max unless the user asks for more
-8. Do NOT wrap the JSON in markdown code blocks — return raw JSON only`;
+8. Limit results to 100 rows max unless the user asks for more
+9. Do NOT wrap the JSON in markdown code blocks — return raw JSON only`;
 }
 
 export function generateSuggestedQuestions(schema: SchemaInfo): string[] {

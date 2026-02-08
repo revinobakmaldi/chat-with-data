@@ -11,9 +11,12 @@ import {
   Area,
   PieChart,
   Pie,
+  ScatterChart,
+  Scatter,
   Cell,
   XAxis,
   YAxis,
+  ZAxis,
   CartesianGrid,
   Tooltip,
   Legend,
@@ -145,6 +148,63 @@ export function DataChart({ chart, data }: DataChartProps) {
                 strokeWidth={2}
               />
             </AreaChart>
+          ) : chart.type === "scatter" ? (
+            <ScatterChart>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+              <XAxis
+                dataKey={chart.xKey}
+                name={chart.xKey}
+                type="number"
+                tick={{ fill: "#9ca3af", fontSize: 12 }}
+                tickLine={{ stroke: "#374151" }}
+                axisLine={{ stroke: "#374151" }}
+              />
+              <YAxis
+                dataKey={chart.yKey}
+                name={chart.yKey}
+                type="number"
+                tick={{ fill: "#9ca3af", fontSize: 12 }}
+                tickLine={{ stroke: "#374151" }}
+                axisLine={{ stroke: "#374151" }}
+              />
+              <ZAxis range={[40, 40]} />
+              <Tooltip
+                cursor={{ strokeDasharray: "3 3", stroke: "#6b7280" }}
+                contentStyle={{
+                  backgroundColor: "#1f2937",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  borderRadius: "8px",
+                  color: "#e5e7eb",
+                }}
+              />
+              <Legend wrapperStyle={{ color: "#9ca3af" }} />
+              <Scatter name={chart.title} data={chartData} fill="#8b5cf6" />
+            </ScatterChart>
+          ) : chart.type === "histogram" ? (
+            <BarChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+              <XAxis
+                dataKey={chart.xKey}
+                tick={{ fill: "#9ca3af", fontSize: 12 }}
+                tickLine={{ stroke: "#374151" }}
+                axisLine={{ stroke: "#374151" }}
+              />
+              <YAxis
+                tick={{ fill: "#9ca3af", fontSize: 12 }}
+                tickLine={{ stroke: "#374151" }}
+                axisLine={{ stroke: "#374151" }}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#1f2937",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  borderRadius: "8px",
+                  color: "#e5e7eb",
+                }}
+              />
+              <Legend wrapperStyle={{ color: "#9ca3af" }} />
+              <Bar dataKey={chart.yKey} fill="#f59e0b" radius={[2, 2, 0, 0]} />
+            </BarChart>
           ) : (
             <PieChart>
               <Pie

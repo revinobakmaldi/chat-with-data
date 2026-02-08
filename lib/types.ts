@@ -11,7 +11,7 @@ export interface SchemaInfo {
 }
 
 export interface ChartConfig {
-  type: "bar" | "line" | "pie" | "area";
+  type: "bar" | "line" | "pie" | "area" | "scatter" | "histogram";
   xKey: string;
   yKey: string;
   title: string;
