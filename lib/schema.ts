@@ -9,7 +9,7 @@ export async function extractSchema(): Promise<SchemaInfo> {
   }));
 
   const sampleResult = await executeQuery(
-    "SELECT * FROM uploaded_data LIMIT 5"
+    "SELECT * FROM uploaded_data LIMIT 10"
   );
 
   const rowCount = await getRowCount();
