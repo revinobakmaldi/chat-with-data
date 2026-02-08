@@ -1,0 +1,69 @@
+"use client";
+
+import { useState, useCallback } from "react";
+import { Send } from "lucide-react";
+
+interface ChatInputProps {
+  onSend: (message: string) => void;
+  disabled?: boolean;
+  suggestedQuestions?: string[];
+}
+
+export function ChatInput({ onSend, disabled, suggestedQuestions }: ChatInputProps) {
+  const [value, setValue] = useState("");
+
+  const handleSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      const trimmed = value.trim();
+      if (!trimmed || disabled) return;
+      onSend(trimmed);
+      setValue("");
+    },
+    [value, disabled, onSend]
+  );
+
+  const handleSuggestionClick = useCallback(
+    (question: string) => {
+      if (disabled) return;
+      onSend(question);
+    },
+    [disabled, onSend]
+  );
+
+  return (
+    <div className="border-t border-white/10 bg-background/80 backdrop-blur-md">
+      {suggestedQuestions && suggestedQuestions.length > 0 && (
+        <div className="flex flex-wrap gap-2 px-4 pt-3">
+          {suggestedQuestions.map((q) => (
+            <button
+              key={q}
+              onClick={() => handleSuggestionClick(q)}
+              disabled={disabled}
+              className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-gray-300 transition-all hover:border-primary/30 hover:bg-white/[0.08] hover:text-foreground disabled:pointer-events-none disabled:opacity-50"
+            >
+              {q}
+            </button>
+          ))}
+        </div>
+      )}
+      <form onSubmit={handleSubmit} className="flex items-center gap-2 p-4">
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder="Ask a question about your data..."
+          disabled={disabled}
+          className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-foreground placeholder:text-gray-500 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30 disabled:opacity-50"
+        />
+        <button
+          type="submit"
+          disabled={disabled || !value.trim()}
+          className="rounded-xl bg-primary p-3 text-white transition-all hover:bg-primary-dark disabled:opacity-50 disabled:hover:bg-primary"
+        >
+          <Send className="h-4 w-4" />
+        </button>
+      </form>
+    </div>
+  );
+}
