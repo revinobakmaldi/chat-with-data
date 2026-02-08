@@ -53,7 +53,7 @@ def call_openrouter(system_prompt: str, messages: list) -> dict:
         })
 
     payload = json.dumps({
-        "model": "openrouter/quasar-alpha",
+        "model": "openai/gpt-oss-120b:free",
         "messages": api_messages,
         "temperature": 0.1,
         "max_tokens": 1024,
