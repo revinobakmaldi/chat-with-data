@@ -21,10 +21,16 @@ export async function initDB(): Promise<void> {
   const JSDELIVR_BUNDLES = mod.getJsDelivrBundles();
   const bundle = await mod.selectBundle(JSDELIVR_BUNDLES);
 
-  const worker = new Worker(bundle.mainWorker!);
+  const workerUrl = URL.createObjectURL(
+    new Blob([`importScripts("${bundle.mainWorker!}");`], {
+      type: "text/javascript",
+    })
+  );
+  const worker = new Worker(workerUrl);
   const logger = new mod.ConsoleLogger();
   db = new mod.AsyncDuckDB(logger, worker);
   await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
+  URL.revokeObjectURL(workerUrl);
   conn = await db.connect();
 }
 
