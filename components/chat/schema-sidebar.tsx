@@ -10,14 +10,14 @@ interface SchemaSidebarProps {
 }
 
 const TYPE_COLORS: Record<string, string> = {
-  VARCHAR: "text-yellow-400",
-  BIGINT: "text-blue-400",
-  INTEGER: "text-blue-400",
-  DOUBLE: "text-green-400",
-  FLOAT: "text-green-400",
-  DATE: "text-purple-400",
-  TIMESTAMP: "text-purple-400",
-  BOOLEAN: "text-orange-400",
+  VARCHAR: "text-yellow-600 dark:text-yellow-400",
+  BIGINT: "text-blue-600 dark:text-blue-400",
+  INTEGER: "text-blue-600 dark:text-blue-400",
+  DOUBLE: "text-green-600 dark:text-green-400",
+  FLOAT: "text-green-600 dark:text-green-400",
+  DATE: "text-purple-600 dark:text-purple-400",
+  TIMESTAMP: "text-purple-600 dark:text-purple-400",
+  BOOLEAN: "text-orange-600 dark:text-orange-400",
 };
 
 function getTypeColor(type: string): string {
@@ -25,7 +25,7 @@ function getTypeColor(type: string): string {
   for (const key of Object.keys(TYPE_COLORS)) {
     if (upper.includes(key)) return TYPE_COLORS[key];
   }
-  return "text-gray-400";
+  return "text-zinc-500 dark:text-zinc-400";
 }
 
 function formatCellValue(value: unknown): string {
@@ -42,22 +42,22 @@ export function SchemaSidebar({ schema }: SchemaSidebarProps) {
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      className={`shrink-0 border-r border-white/10 bg-white/[0.02] transition-all duration-300 ${
+      className={`shrink-0 border-r border-zinc-200/50 dark:border-zinc-800/50 bg-zinc-50 dark:bg-zinc-900 transition-all duration-300 ${
         collapsed ? "w-10" : tab === "preview" ? "w-1/2" : "w-56"
       }`}
     >
-      <div className="flex items-center justify-between border-b border-white/10 px-3 py-2">
+      <div className="flex items-center justify-between border-b border-zinc-200/50 dark:border-zinc-800/50 px-3 py-2">
         {!collapsed && (
           <div className="flex items-center gap-2">
             <Database className="h-4 w-4 text-primary" />
-            <span className="text-xs font-medium text-gray-300">
+            <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
               {schema.tableName}
             </span>
           </div>
         )}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="rounded p-1 text-gray-500 hover:bg-white/5 hover:text-gray-300"
+          className="rounded p-1 text-zinc-500 hover:bg-zinc-200/50 dark:hover:bg-zinc-800 hover:text-zinc-700 dark:hover:text-zinc-300"
         >
           {collapsed ? (
             <ChevronRight className="h-3.5 w-3.5" />
@@ -69,13 +69,13 @@ export function SchemaSidebar({ schema }: SchemaSidebarProps) {
 
       {!collapsed && (
         <>
-          <div className="flex border-b border-white/10">
+          <div className="flex border-b border-zinc-200/50 dark:border-zinc-800/50">
             <button
               onClick={() => setTab("schema")}
               className={`flex-1 px-3 py-1.5 text-xs font-medium transition-colors ${
                 tab === "schema"
                   ? "border-b-2 border-primary text-primary"
-                  : "text-gray-500 hover:text-gray-300"
+                  : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
               }`}
             >
               Schema
@@ -85,7 +85,7 @@ export function SchemaSidebar({ schema }: SchemaSidebarProps) {
               className={`flex-1 px-3 py-1.5 text-xs font-medium transition-colors ${
                 tab === "preview"
                   ? "border-b-2 border-primary text-primary"
-                  : "text-gray-500 hover:text-gray-300"
+                  : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
               }`}
             >
               Preview
@@ -98,7 +98,7 @@ export function SchemaSidebar({ schema }: SchemaSidebarProps) {
                 <span className="font-mono text-xs text-primary">
                   {schema.tableName}
                 </span>
-                <span className="text-[10px] text-gray-500">
+                <span className="text-[10px] text-zinc-500">
                   {schema.rowCount} rows
                 </span>
               </div>
@@ -106,9 +106,9 @@ export function SchemaSidebar({ schema }: SchemaSidebarProps) {
                 {schema.columns.map((col) => (
                   <div
                     key={col.name}
-                    className="flex items-center justify-between rounded px-2 py-1 text-xs hover:bg-white/5"
+                    className="flex items-center justify-between rounded px-2 py-1 text-xs hover:bg-zinc-200/50 dark:hover:bg-zinc-800"
                   >
-                    <span className="text-gray-300">{col.name}</span>
+                    <span className="text-zinc-700 dark:text-zinc-300">{col.name}</span>
                     <span className={`font-mono text-[10px] ${getTypeColor(col.type)}`}>
                       {col.type}
                     </span>
@@ -120,14 +120,14 @@ export function SchemaSidebar({ schema }: SchemaSidebarProps) {
             <div className="overflow-x-auto p-3">
               <table className="w-full text-xs">
                 <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="whitespace-nowrap px-2 py-1.5 text-left font-medium text-gray-500">
+                  <tr className="border-b border-zinc-200/50 dark:border-zinc-800/50">
+                    <th className="whitespace-nowrap px-2 py-1.5 text-left font-medium text-zinc-500">
                       #
                     </th>
                     {schema.columns.map((col) => (
                       <th
                         key={col.name}
-                        className="whitespace-nowrap px-2 py-1.5 text-left font-medium text-gray-400"
+                        className="whitespace-nowrap px-2 py-1.5 text-left font-medium text-zinc-600 dark:text-zinc-400"
                       >
                         {col.name}
                       </th>
@@ -138,15 +138,15 @@ export function SchemaSidebar({ schema }: SchemaSidebarProps) {
                   {schema.sampleRows.map((row, i) => (
                     <tr
                       key={i}
-                      className="border-b border-white/5 hover:bg-white/5"
+                      className="border-b border-zinc-100 dark:border-zinc-800/30 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                     >
-                      <td className="whitespace-nowrap px-2 py-1.5 text-gray-600">
+                      <td className="whitespace-nowrap px-2 py-1.5 text-zinc-500">
                         {i + 1}
                       </td>
                       {schema.columns.map((col) => (
                         <td
                           key={col.name}
-                          className="max-w-[200px] truncate whitespace-nowrap px-2 py-1.5 text-gray-300"
+                          className="max-w-[200px] truncate whitespace-nowrap px-2 py-1.5 text-zinc-700 dark:text-zinc-300"
                           title={formatCellValue(row[col.name])}
                         >
                           {formatCellValue(row[col.name])}
@@ -156,7 +156,7 @@ export function SchemaSidebar({ schema }: SchemaSidebarProps) {
                   ))}
                 </tbody>
               </table>
-              <div className="mt-3 text-center text-[10px] text-gray-600">
+              <div className="mt-3 text-center text-[10px] text-zinc-500">
                 Showing {schema.sampleRows.length} of {schema.rowCount} rows
               </div>
             </div>

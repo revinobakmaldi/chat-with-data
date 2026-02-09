@@ -3,6 +3,18 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Chart theming */
+  --chart-tooltip-bg: #ffffff;
+  --chart-tooltip-border: rgba(228, 228, 231, 0.5);
+  --chart-tooltip-text: #27272a;
+  --chart-grid: rgba(0, 0, 0, 0.06);
+  --chart-axis: #71717a;
+  --chart-axis-line: #d4d4d8;
+
+  /* Scrollbar */
+  --scrollbar-thumb: #d4d4d8;
+  --scrollbar-thumb-hover: #a1a1aa;
 }
 
 @theme inline {
@@ -23,6 +35,16 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+
+    --chart-tooltip-bg: #1f2937;
+    --chart-tooltip-border: rgba(255, 255, 255, 0.1);
+    --chart-tooltip-text: #e5e7eb;
+    --chart-grid: rgba(255, 255, 255, 0.05);
+    --chart-axis: #9ca3af;
+    --chart-axis-line: #374151;
+
+    --scrollbar-thumb: #374151;
+    --scrollbar-thumb-hover: #4b5563;
   }
 }
 
@@ -47,10 +69,10 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #374151;
+  background: var(--scrollbar-thumb);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #4b5563;
+  background: var(--scrollbar-thumb-hover);
 }

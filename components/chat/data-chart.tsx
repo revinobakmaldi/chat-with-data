@@ -39,6 +39,16 @@ const COLORS = [
   "#06b6d4",
 ];
 
+const tooltipStyle = {
+  backgroundColor: "var(--chart-tooltip-bg)",
+  border: "1px solid var(--chart-tooltip-border)",
+  borderRadius: "8px",
+  color: "var(--chart-tooltip-text)",
+};
+
+const tickStyle = { fill: "var(--chart-axis)", fontSize: 12 };
+const axisLineStyle = { stroke: "var(--chart-axis-line)" };
+
 export function DataChart({ chart, data }: DataChartProps) {
   if (!data.rows.length) return null;
 
@@ -55,59 +65,45 @@ export function DataChart({ chart, data }: DataChartProps) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-xl border border-white/10 bg-white/[0.02] p-4"
+      className="rounded-xl border border-zinc-200/50 dark:border-zinc-800/50 bg-zinc-50 dark:bg-zinc-900 p-4"
     >
-      <h4 className="mb-3 text-sm font-medium text-gray-300">{chart.title}</h4>
+      <h4 className="mb-3 text-sm font-medium text-zinc-700 dark:text-zinc-300">{chart.title}</h4>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           {chart.type === "bar" ? (
             <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
               <XAxis
                 dataKey={chart.xKey}
-                tick={{ fill: "#9ca3af", fontSize: 12 }}
-                tickLine={{ stroke: "#374151" }}
-                axisLine={{ stroke: "#374151" }}
+                tick={tickStyle}
+                tickLine={axisLineStyle}
+                axisLine={axisLineStyle}
               />
               <YAxis
-                tick={{ fill: "#9ca3af", fontSize: 12 }}
-                tickLine={{ stroke: "#374151" }}
-                axisLine={{ stroke: "#374151" }}
+                tick={tickStyle}
+                tickLine={axisLineStyle}
+                axisLine={axisLineStyle}
               />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "#1f2937",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  borderRadius: "8px",
-                  color: "#e5e7eb",
-                }}
-              />
-              <Legend wrapperStyle={{ color: "#9ca3af" }} />
+              <Tooltip contentStyle={tooltipStyle} />
+              <Legend wrapperStyle={{ color: "var(--chart-axis)" }} />
               <Bar dataKey={chart.yKey} fill="#10b981" radius={[4, 4, 0, 0]} />
             </BarChart>
           ) : chart.type === "line" ? (
             <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
               <XAxis
                 dataKey={chart.xKey}
-                tick={{ fill: "#9ca3af", fontSize: 12 }}
-                tickLine={{ stroke: "#374151" }}
-                axisLine={{ stroke: "#374151" }}
+                tick={tickStyle}
+                tickLine={axisLineStyle}
+                axisLine={axisLineStyle}
               />
               <YAxis
-                tick={{ fill: "#9ca3af", fontSize: 12 }}
-                tickLine={{ stroke: "#374151" }}
-                axisLine={{ stroke: "#374151" }}
+                tick={tickStyle}
+                tickLine={axisLineStyle}
+                axisLine={axisLineStyle}
               />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "#1f2937",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  borderRadius: "8px",
-                  color: "#e5e7eb",
-                }}
-              />
-              <Legend wrapperStyle={{ color: "#9ca3af" }} />
+              <Tooltip contentStyle={tooltipStyle} />
+              <Legend wrapperStyle={{ color: "var(--chart-axis)" }} />
               <Line
                 type="monotone"
                 dataKey={chart.yKey}
@@ -118,27 +114,20 @@ export function DataChart({ chart, data }: DataChartProps) {
             </LineChart>
           ) : chart.type === "area" ? (
             <AreaChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
               <XAxis
                 dataKey={chart.xKey}
-                tick={{ fill: "#9ca3af", fontSize: 12 }}
-                tickLine={{ stroke: "#374151" }}
-                axisLine={{ stroke: "#374151" }}
+                tick={tickStyle}
+                tickLine={axisLineStyle}
+                axisLine={axisLineStyle}
               />
               <YAxis
-                tick={{ fill: "#9ca3af", fontSize: 12 }}
-                tickLine={{ stroke: "#374151" }}
-                axisLine={{ stroke: "#374151" }}
+                tick={tickStyle}
+                tickLine={axisLineStyle}
+                axisLine={axisLineStyle}
               />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "#1f2937",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  borderRadius: "8px",
-                  color: "#e5e7eb",
-                }}
-              />
-              <Legend wrapperStyle={{ color: "#9ca3af" }} />
+              <Tooltip contentStyle={tooltipStyle} />
+              <Legend wrapperStyle={{ color: "var(--chart-axis)" }} />
               <Area
                 type="monotone"
                 dataKey={chart.yKey}
@@ -150,59 +139,47 @@ export function DataChart({ chart, data }: DataChartProps) {
             </AreaChart>
           ) : chart.type === "scatter" ? (
             <ScatterChart>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
               <XAxis
                 dataKey={chart.xKey}
                 name={chart.xKey}
                 type="number"
-                tick={{ fill: "#9ca3af", fontSize: 12 }}
-                tickLine={{ stroke: "#374151" }}
-                axisLine={{ stroke: "#374151" }}
+                tick={tickStyle}
+                tickLine={axisLineStyle}
+                axisLine={axisLineStyle}
               />
               <YAxis
                 dataKey={chart.yKey}
                 name={chart.yKey}
                 type="number"
-                tick={{ fill: "#9ca3af", fontSize: 12 }}
-                tickLine={{ stroke: "#374151" }}
-                axisLine={{ stroke: "#374151" }}
+                tick={tickStyle}
+                tickLine={axisLineStyle}
+                axisLine={axisLineStyle}
               />
               <ZAxis range={[40, 40]} />
               <Tooltip
                 cursor={{ strokeDasharray: "3 3", stroke: "#6b7280" }}
-                contentStyle={{
-                  backgroundColor: "#1f2937",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  borderRadius: "8px",
-                  color: "#e5e7eb",
-                }}
+                contentStyle={tooltipStyle}
               />
-              <Legend wrapperStyle={{ color: "#9ca3af" }} />
+              <Legend wrapperStyle={{ color: "var(--chart-axis)" }} />
               <Scatter name={chart.title} data={chartData} fill="#8b5cf6" />
             </ScatterChart>
           ) : chart.type === "histogram" ? (
             <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
               <XAxis
                 dataKey={chart.xKey}
-                tick={{ fill: "#9ca3af", fontSize: 12 }}
-                tickLine={{ stroke: "#374151" }}
-                axisLine={{ stroke: "#374151" }}
+                tick={tickStyle}
+                tickLine={axisLineStyle}
+                axisLine={axisLineStyle}
               />
               <YAxis
-                tick={{ fill: "#9ca3af", fontSize: 12 }}
-                tickLine={{ stroke: "#374151" }}
-                axisLine={{ stroke: "#374151" }}
+                tick={tickStyle}
+                tickLine={axisLineStyle}
+                axisLine={axisLineStyle}
               />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "#1f2937",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  borderRadius: "8px",
-                  color: "#e5e7eb",
-                }}
-              />
-              <Legend wrapperStyle={{ color: "#9ca3af" }} />
+              <Tooltip contentStyle={tooltipStyle} />
+              <Legend wrapperStyle={{ color: "var(--chart-axis)" }} />
               <Bar dataKey={chart.yKey} fill="#f59e0b" radius={[2, 2, 0, 0]} />
             </BarChart>
           ) : (
@@ -226,15 +203,8 @@ export function DataChart({ chart, data }: DataChartProps) {
                   />
                 ))}
               </Pie>
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "#1f2937",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  borderRadius: "8px",
-                  color: "#e5e7eb",
-                }}
-              />
-              <Legend wrapperStyle={{ color: "#9ca3af" }} />
+              <Tooltip contentStyle={tooltipStyle} />
+              <Legend wrapperStyle={{ color: "var(--chart-axis)" }} />
             </PieChart>
           )}
         </ResponsiveContainer>

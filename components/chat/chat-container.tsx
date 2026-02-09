@@ -121,10 +121,10 @@ export function ChatContainer({ schema }: ChatContainerProps) {
           {messages.length === 0 && (
             <div className="flex h-full items-center justify-center">
               <div className="text-center">
-                <p className="text-lg font-medium text-gray-400">
+                <p className="text-lg font-medium text-zinc-600 dark:text-zinc-400">
                   Ask a question about your data
                 </p>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-zinc-500">
                   I&apos;ll write SQL, run it, and visualize the results
                 </p>
               </div>

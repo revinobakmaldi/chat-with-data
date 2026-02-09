@@ -35,7 +35,7 @@ export function SampleDatasetButton({ onFileReady, disabled }: SampleDatasetButt
       animate="visible"
       onClick={handleClick}
       disabled={disabled || loading}
-      className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-sm text-gray-300 transition-all hover:border-primary/30 hover:bg-white/[0.08] hover:text-foreground disabled:pointer-events-none disabled:opacity-50"
+      className="inline-flex items-center gap-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 px-5 py-2.5 text-sm text-zinc-700 dark:text-zinc-300 transition-all hover:border-primary/30 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary disabled:pointer-events-none disabled:opacity-50"
     >
       {loading ? (
         <Loader2 className="h-4 w-4 animate-spin" />

@@ -32,7 +32,7 @@ export function ChatInput({ onSend, disabled, suggestedQuestions }: ChatInputPro
   );
 
   return (
-    <div className="border-t border-white/10 bg-background/80 backdrop-blur-md">
+    <div className="border-t border-zinc-200/50 dark:border-zinc-800/50 bg-white/80 dark:bg-black/80 backdrop-blur-xl">
       {suggestedQuestions && suggestedQuestions.length > 0 && (
         <div className="flex flex-wrap gap-2 px-4 pt-3">
           {suggestedQuestions.map((q) => (
@@ -40,7 +40,7 @@ export function ChatInput({ onSend, disabled, suggestedQuestions }: ChatInputPro
               key={q}
               onClick={() => handleSuggestionClick(q)}
               disabled={disabled}
-              className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-gray-300 transition-all hover:border-primary/30 hover:bg-white/[0.08] hover:text-foreground disabled:pointer-events-none disabled:opacity-50"
+              className="rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 text-xs text-zinc-700 dark:text-zinc-300 transition-all hover:border-primary/30 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary disabled:pointer-events-none disabled:opacity-50"
             >
               {q}
             </button>
@@ -54,7 +54,7 @@ export function ChatInput({ onSend, disabled, suggestedQuestions }: ChatInputPro
           onChange={(e) => setValue(e.target.value)}
           placeholder="Ask a question about your data..."
           disabled={disabled}
-          className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-foreground placeholder:text-gray-500 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30 disabled:opacity-50"
+          className="flex-1 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 px-4 py-3 text-sm text-foreground placeholder:text-zinc-500 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/30 disabled:opacity-50"
         />
         <button
           type="submit"

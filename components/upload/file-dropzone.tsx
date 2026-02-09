@@ -82,26 +82,26 @@ export function FileDropzone({ onFileSelect, disabled }: FileDropzoneProps) {
         className={`group relative cursor-pointer rounded-2xl border-2 border-dashed p-12 text-center transition-all duration-300 ${
           isDragging
             ? "border-primary bg-primary/10"
-            : "border-white/20 hover:border-primary/50 hover:bg-white/[0.03]"
+            : "border-zinc-300 dark:border-zinc-700 hover:border-primary/50 hover:bg-zinc-50 dark:hover:bg-zinc-900"
         } ${disabled ? "pointer-events-none opacity-50" : ""}`}
       >
         <div className="flex flex-col items-center gap-4">
           <div
             className={`rounded-2xl p-4 transition-colors ${
-              isDragging ? "bg-primary/20" : "bg-white/5 group-hover:bg-primary/10"
+              isDragging ? "bg-primary/20" : "bg-zinc-100 dark:bg-zinc-800 group-hover:bg-primary/10"
             }`}
           >
             {isDragging ? (
               <FileSpreadsheet className="h-10 w-10 text-primary" />
             ) : (
-              <Upload className="h-10 w-10 text-gray-400 group-hover:text-primary" />
+              <Upload className="h-10 w-10 text-zinc-400 dark:text-zinc-500 group-hover:text-primary" />
             )}
           </div>
           <div>
             <p className="text-lg font-medium text-foreground">
               {isDragging ? "Drop your CSV here" : "Drop CSV file here or click to browse"}
             </p>
-            <p className="mt-1 text-sm text-gray-400">
+            <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
               CSV files up to 4MB
             </p>
           </div>

@@ -66,10 +66,10 @@ export default function Home() {
             <div className="mx-auto mb-4 inline-flex rounded-2xl bg-primary/10 p-4">
               <MessageSquare className="h-10 w-10 text-primary" />
             </div>
-            <h1 className="bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-4xl font-bold text-transparent sm:text-5xl">
+            <h1 className="bg-gradient-to-r from-zinc-900 via-zinc-700 to-zinc-500 dark:from-white dark:via-gray-200 dark:to-gray-400 bg-clip-text text-4xl font-bold text-transparent sm:text-5xl">
               Chat with Data
             </h1>
-            <p className="mt-3 text-lg text-gray-400">
+            <p className="mt-3 text-lg text-zinc-600 dark:text-zinc-400">
               Upload a CSV and ask questions in plain English
             </p>
           </motion.div>
@@ -94,7 +94,7 @@ export default function Home() {
             <h2 className="text-xl font-semibold text-foreground">
               Loading {fileName}...
             </h2>
-            <p className="mt-2 text-sm text-gray-400">
+            <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
               Initializing DuckDB and extracting schema
             </p>
 
@@ -102,7 +102,7 @@ export default function Home() {
               {[...Array(4)].map((_, i) => (
                 <div
                   key={i}
-                  className="h-20 animate-pulse rounded-xl border border-white/10 bg-white/5"
+                  className="h-20 animate-pulse rounded-xl border border-zinc-200/50 dark:border-zinc-800/50 bg-zinc-100 dark:bg-zinc-800"
                 />
               ))}
             </div>
@@ -124,10 +124,10 @@ export default function Home() {
             <h2 className="text-xl font-semibold text-foreground">
               Failed to Load Dataset
             </h2>
-            <p className="mt-2 max-w-md text-sm text-gray-400">{error}</p>
+            <p className="mt-2 max-w-md text-sm text-zinc-600 dark:text-zinc-400">{error}</p>
             <button
               onClick={handleReset}
-              className="mt-6 inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-sm text-gray-300 transition-all hover:border-primary/30 hover:bg-white/[0.08] hover:text-foreground"
+              className="mt-6 inline-flex items-center gap-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 px-5 py-2.5 text-sm text-zinc-700 dark:text-zinc-300 transition-all hover:border-primary/30 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary"
             >
               <RotateCcw className="h-4 w-4" />
               Try Again
@@ -141,7 +141,7 @@ export default function Home() {
 
       {/* Footer (only on upload) */}
       {state === "upload" && (
-        <footer className="border-t border-white/5 py-6 text-center text-xs text-gray-500">
+        <footer className="border-t border-zinc-200/50 dark:border-zinc-800/50 py-6 text-center text-xs text-zinc-500">
           Built by{" "}
           <a
             href="https://revinobakmaldi.vercel.app"

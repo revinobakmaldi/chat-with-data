@@ -41,13 +41,13 @@ export function ChatMessage({ message }: ChatMessageProps) {
           className={`inline-block rounded-2xl px-4 py-2.5 text-sm ${
             isUser
               ? "bg-secondary/20 text-foreground"
-              : "bg-white/5 text-gray-300"
+              : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300"
           }`}
         >
           {message.loading ? (
             <div className="flex items-center gap-2">
               <Loader2 className="h-4 w-4 animate-spin text-primary" />
-              <span className="text-gray-400">Thinking...</span>
+              <span className="text-zinc-600 dark:text-zinc-400">Thinking...</span>
             </div>
           ) : (
             message.content
