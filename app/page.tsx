@@ -51,8 +51,9 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative z-10 flex min-h-screen flex-col text-foreground">
+    <>
       <AnimatedBackground />
+      <div className="relative z-10 flex min-h-screen flex-col text-foreground">
       <Navbar onNewChat={handleReset} showNewChat={state === "ready"} />
 
       {/* Upload State */}
@@ -152,5 +153,6 @@ export default function Home() {
         </footer>
       )}
     </div>
+    </>
   );
 }
