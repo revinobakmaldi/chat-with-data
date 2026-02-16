@@ -51,7 +51,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground">
+    <div className="relative z-10 flex min-h-screen flex-col text-foreground">
       <AnimatedBackground />
       <Navbar onNewChat={handleReset} showNewChat={state === "ready"} />
 
