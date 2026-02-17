@@ -19,8 +19,7 @@ PLOTLY_SCOPE_DOC = """AVAILABLE SCOPE (these variables are already defined — d
 You MUST produce a variable called `fig` (a plotly Figure object).
 You CAN manipulate df freely: pivot_table, melt, groupby, sort_values, etc.
 Use px.imshow for heatmaps/matrices, px.bar for bar charts, px.line for line charts, etc.
-Apply fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)") for transparent backgrounds.
-Use template="plotly_dark" for dark-mode-friendly defaults."""
+Do NOT set template, font colors, paper_bgcolor, or plot_bgcolor — the frontend handles all theming."""
 
 
 def build_visualize_prompt(question: str, sql: str, columns: list, rows: list) -> str:
@@ -59,11 +58,10 @@ RULES:
 3. Column names must exactly match: {', '.join(columns)}
 4. You can freely transform df (pivot_table, melt, groupby, etc.) before charting
 5. For matrix/heatmap visualizations, use px.imshow with df.pivot_table(...)
-6. Apply transparent backgrounds: fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
-7. Use template="plotly_dark" in the figure creation for dark-mode compatibility
-8. Use "pie" only when there are fewer than 8 categories
-9. Use line charts for time-series or sequential data
-10. Return raw JSON only, no markdown code blocks"""
+6. Do NOT set template, font colors, paper_bgcolor, or plot_bgcolor — the frontend handles theming
+7. Use "pie" only when there are fewer than 8 categories
+8. Use line charts for time-series or sequential data
+9. Return raw JSON only, no markdown code blocks"""
 
 
 def parse_visualize_response(raw: str) -> dict:

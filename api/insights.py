@@ -25,8 +25,7 @@ PLOTLY_SCOPE_DOC = """AVAILABLE SCOPE for visualization code (these variables ar
 You MUST produce a variable called `fig` (a plotly Figure object).
 You CAN manipulate df freely: pivot_table, melt, groupby, sort_values, etc.
 Use px.imshow for heatmaps/matrices, px.bar for bar charts, px.line for line charts, etc.
-Apply fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)") for transparent backgrounds.
-Use template="plotly_dark" for dark-mode-friendly defaults."""
+Do NOT set template, font colors, paper_bgcolor, or plot_bgcolor — the frontend handles all theming."""
 
 
 def build_plan_prompt(schema: dict) -> str:
@@ -120,7 +119,7 @@ Return ONLY valid JSON (no markdown fences) with this structure:
       "priority": "high|medium|low",
       "finding": "Detailed explanation of the insight and its business implications",
       "sql": "The SQL query that produced this insight",
-      "pythonCode": "fig = px.bar(df, x='col1', y='col2')\\nfig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', template='plotly_dark')",
+      "pythonCode": "fig = px.bar(df, x='col1', y='col2', title='My Chart')",
       "chartTitle": "Chart title"
     }}
   ]
