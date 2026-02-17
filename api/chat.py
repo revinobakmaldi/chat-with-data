@@ -123,7 +123,7 @@ def call_openrouter(system_prompt: str, messages: list) -> dict:
         })
 
     payload = json.dumps({
-        "model": "openai/gpt-oss-120b:free",
+        "model": "openai/gpt-oss-120b",
         "messages": api_messages,
         "temperature": 0.1,
         "max_tokens": 1024,
