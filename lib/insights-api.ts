@@ -23,17 +23,25 @@ export function validatePlanResponse(data: unknown): AnalysisPlanResponse {
   }
 
   const validated: AnalysisPlanItem[] = [];
-  for (const q of queries) {
+  for (let idx = 0; idx < queries.length; idx++) {
+    const q = queries[idx];
     if (
       typeof q === "object" &&
       q !== null &&
-      typeof (q as Record<string, unknown>).id === "string" &&
       typeof (q as Record<string, unknown>).title === "string" &&
       typeof (q as Record<string, unknown>).sql === "string"
     ) {
       const item = q as Record<string, unknown>;
+      let id: string;
+      if (typeof item.id === "string" && item.id) {
+        id = item.id;
+      } else if (typeof item.id === "number") {
+        id = String(item.id);
+      } else {
+        id = `q${idx + 1}`;
+      }
       validated.push({
-        id: item.id as string,
+        id,
         title: item.title as string,
         sql: item.sql as string,
         rationale: (item.rationale as string) || "",

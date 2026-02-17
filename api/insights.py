@@ -119,6 +119,40 @@ RULES:
 5. Return raw JSON only, no markdown code blocks"""
 
 
+def _extract_json_object(text: str) -> dict | None:
+    """Extract the first top-level JSON object from text using brace counting."""
+    start = text.find("{")
+    if start == -1:
+        return None
+    depth = 0
+    in_string = False
+    escape = False
+    for i in range(start, len(text)):
+        ch = text[i]
+        if escape:
+            escape = False
+            continue
+        if ch == "\\":
+            if in_string:
+                escape = True
+            continue
+        if ch == '"' and not escape:
+            in_string = not in_string
+            continue
+        if in_string:
+            continue
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                try:
+                    return json.loads(text[start : i + 1])
+                except json.JSONDecodeError:
+                    return None
+    return None
+
+
 def parse_plan_response(raw: str) -> dict:
     text = raw.strip()
 
@@ -133,14 +167,7 @@ def parse_plan_response(raw: str) -> dict:
     try:
         parsed = json.loads(text)
     except json.JSONDecodeError:
-        match = re.search(
-            r"\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}", text, re.DOTALL
-        )
-        if match:
-            try:
-                parsed = json.loads(match.group())
-            except json.JSONDecodeError:
-                pass
+        parsed = _extract_json_object(text)
 
     if not isinstance(parsed, dict):
         # Try to find a JSON array pattern for queries
@@ -154,20 +181,32 @@ def parse_plan_response(raw: str) -> dict:
                 pass
         return dict(FALLBACK_PLAN)
 
-    queries = parsed.get("queries", [])
+    queries = parsed.get("queries")
+    # If "queries" key is missing, look for any list-valued key
+    if not isinstance(queries, list):
+        for key, val in parsed.items():
+            if isinstance(val, list) and len(val) > 0 and isinstance(val[0], dict):
+                queries = val
+                break
     if not isinstance(queries, list):
         return dict(FALLBACK_PLAN)
 
     valid = []
-    for q in queries:
+    for idx, q in enumerate(queries):
         if (
             isinstance(q, dict)
-            and isinstance(q.get("id"), str)
             and isinstance(q.get("title"), str)
             and isinstance(q.get("sql"), str)
         ):
+            raw_id = q.get("id")
+            if isinstance(raw_id, str) and raw_id:
+                qid = raw_id
+            elif isinstance(raw_id, (int, float)):
+                qid = str(raw_id)
+            else:
+                qid = f"q{idx + 1}"
             valid.append({
-                "id": q["id"],
+                "id": qid,
                 "title": q["title"],
                 "sql": q["sql"],
                 "rationale": q.get("rationale", ""),
