@@ -4,7 +4,7 @@ import { useRef, useEffect, useCallback, useState } from "react";
 import { ChatMessage } from "./chat-message";
 import { ChatInput } from "./chat-input";
 import { SchemaSidebar } from "./schema-sidebar";
-import { sendChatMessage } from "@/lib/api";
+import { sendChatMessage, requestVisualization } from "@/lib/api";
 import { executeQuery } from "@/lib/duckdb";
 import { generateSuggestedQuestions } from "@/lib/prompt";
 import { useInsights } from "@/lib/use-insights";
@@ -13,6 +13,7 @@ import type {
   ChatMessage as ChatMessageType,
   LLMResponse,
   QueryResult,
+  ChartSpec,
 } from "@/lib/types";
 
 interface ChatContainerProps {
@@ -67,6 +68,7 @@ export function ChatContainer({ schema }: ChatContainerProps) {
 
         let queryResult: QueryResult | undefined;
         let queryError: string | undefined;
+        let chartSpec: ChartSpec | undefined;
 
         if (llmResponse.sql) {
           try {
@@ -74,6 +76,21 @@ export function ChatContainer({ schema }: ChatContainerProps) {
           } catch (err) {
             queryError =
               err instanceof Error ? err.message : "SQL execution failed";
+          }
+
+          // Phase 2: ask LLM to generate chart spec based on actual results
+          if (queryResult && queryResult.rows.length > 0) {
+            try {
+              const chart = await requestVisualization(
+                content,
+                llmResponse.sql,
+                queryResult.columns,
+                queryResult.rows
+              );
+              if (chart) chartSpec = chart;
+            } catch {
+              // Chart generation failure is non-critical
+            }
           }
         }
 
@@ -84,7 +101,7 @@ export function ChatContainer({ schema }: ChatContainerProps) {
                   ...m,
                   content: llmResponse.explanation,
                   sql: llmResponse.sql,
-                  chart: llmResponse.chart,
+                  chart: chartSpec,
                   queryResult,
                   error: queryError,
                   loading: false,

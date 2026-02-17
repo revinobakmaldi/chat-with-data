@@ -10,7 +10,7 @@ FALLBACK_INSIGHTS = {
     "summary": "Unable to generate insights. Please try again.",
     "insights": [],
 }
-VALID_CHART_TYPES = {"bar", "line", "pie", "area", "scatter", "histogram"}
+VALID_CHART_TYPES = {"bar", "line", "pie", "area", "scatter"}
 
 
 def build_plan_prompt(schema: dict) -> str:
@@ -103,10 +103,11 @@ Return ONLY valid JSON (no markdown fences) with this structure:
       "finding": "Detailed explanation of the insight and its business implications",
       "sql": "The SQL query that produced this insight",
       "chart": {{
-        "type": "bar|line|pie|area",
+        "type": "bar|line|pie|area|scatter",
+        "title": "Chart title",
         "xKey": "column_name",
-        "yKey": "column_name",
-        "title": "Chart title"
+        "yKeys": [{{"key": "column_name", "label": "Display label"}}],
+        "stacked": false
       }}
     }}
   ]
@@ -278,14 +279,33 @@ def parse_insights_response(raw: str) -> dict:
             if (
                 chart.get("type") in VALID_CHART_TYPES
                 and isinstance(chart.get("xKey"), str)
-                and isinstance(chart.get("yKey"), str)
             ):
-                entry["chart"] = {
-                    "type": chart["type"],
-                    "xKey": chart["xKey"],
-                    "yKey": chart["yKey"],
-                    "title": chart.get("title", item["title"]),
-                }
+                y_keys_raw = chart.get("yKeys", [])
+                # Support legacy single yKey format
+                if not isinstance(y_keys_raw, list) or len(y_keys_raw) == 0:
+                    if isinstance(chart.get("yKey"), str):
+                        y_keys_raw = [{"key": chart["yKey"]}]
+                    else:
+                        y_keys_raw = []
+
+                valid_y_keys = []
+                for yk in y_keys_raw:
+                    if isinstance(yk, dict) and isinstance(yk.get("key"), str):
+                        yk_entry = {"key": yk["key"]}
+                        if isinstance(yk.get("label"), str):
+                            yk_entry["label"] = yk["label"]
+                        if isinstance(yk.get("color"), str):
+                            yk_entry["color"] = yk["color"]
+                        valid_y_keys.append(yk_entry)
+
+                if valid_y_keys:
+                    entry["chart"] = {
+                        "type": chart["type"],
+                        "title": chart.get("title", item["title"]),
+                        "xKey": chart["xKey"],
+                        "yKeys": valid_y_keys,
+                        "stacked": bool(chart.get("stacked", False)),
+                    }
 
         valid.append(entry)
 

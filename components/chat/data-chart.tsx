@@ -21,10 +21,10 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import type { ChartConfig, QueryResult } from "@/lib/types";
+import type { ChartSpec, QueryResult } from "@/lib/types";
 
 interface DataChartProps {
-  chart: ChartConfig;
+  chart: ChartSpec;
   data: QueryResult;
 }
 
@@ -49,12 +49,19 @@ const tooltipStyle = {
 const tickStyle = { fill: "var(--chart-axis)", fontSize: 12 };
 const axisLineStyle = { stroke: "var(--chart-axis-line)" };
 
+function getColor(yKey: { key: string; color?: string }, index: number): string {
+  return yKey.color || COLORS[index % COLORS.length];
+}
+
 export function DataChart({ chart, data }: DataChartProps) {
   if (!data.rows.length) return null;
 
+  // Validate that xKey and all yKeys exist in columns
   const missingKeys: string[] = [];
   if (!data.columns.includes(chart.xKey)) missingKeys.push(chart.xKey);
-  if (!data.columns.includes(chart.yKey)) missingKeys.push(chart.yKey);
+  for (const yk of chart.yKeys) {
+    if (!data.columns.includes(yk.key)) missingKeys.push(yk.key);
+  }
 
   if (missingKeys.length > 0) {
     return (
@@ -69,11 +76,13 @@ export function DataChart({ chart, data }: DataChartProps) {
   const chartData = data.rows.map((row) => {
     const entry: Record<string, unknown> = {};
     for (const col of data.columns) {
-      const val = row[col];
-      entry[col] = typeof val === "number" ? val : val;
+      entry[col] = row[col];
     }
     return entry;
   });
+
+  // For pie chart, use only the first yKey
+  const firstYKey = chart.yKeys[0];
 
   return (
     <motion.div
@@ -100,7 +109,16 @@ export function DataChart({ chart, data }: DataChartProps) {
               />
               <Tooltip contentStyle={tooltipStyle} />
               <Legend wrapperStyle={{ color: "var(--chart-axis)" }} />
-              <Bar dataKey={chart.yKey} fill="#10b981" radius={[4, 4, 0, 0]} />
+              {chart.yKeys.map((yk, i) => (
+                <Bar
+                  key={yk.key}
+                  dataKey={yk.key}
+                  name={yk.label || yk.key}
+                  fill={getColor(yk, i)}
+                  radius={[4, 4, 0, 0]}
+                  stackId={chart.stacked ? "stack" : undefined}
+                />
+              ))}
             </BarChart>
           ) : chart.type === "line" ? (
             <LineChart data={chartData}>
@@ -118,13 +136,17 @@ export function DataChart({ chart, data }: DataChartProps) {
               />
               <Tooltip contentStyle={tooltipStyle} />
               <Legend wrapperStyle={{ color: "var(--chart-axis)" }} />
-              <Line
-                type="monotone"
-                dataKey={chart.yKey}
-                stroke="#3b82f6"
-                strokeWidth={2}
-                dot={{ fill: "#3b82f6", r: 4 }}
-              />
+              {chart.yKeys.map((yk, i) => (
+                <Line
+                  key={yk.key}
+                  type="monotone"
+                  dataKey={yk.key}
+                  name={yk.label || yk.key}
+                  stroke={getColor(yk, i)}
+                  strokeWidth={2}
+                  dot={{ fill: getColor(yk, i), r: 4 }}
+                />
+              ))}
             </LineChart>
           ) : chart.type === "area" ? (
             <AreaChart data={chartData}>
@@ -142,14 +164,19 @@ export function DataChart({ chart, data }: DataChartProps) {
               />
               <Tooltip contentStyle={tooltipStyle} />
               <Legend wrapperStyle={{ color: "var(--chart-axis)" }} />
-              <Area
-                type="monotone"
-                dataKey={chart.yKey}
-                stroke="#14b8a6"
-                fill="#14b8a6"
-                fillOpacity={0.2}
-                strokeWidth={2}
-              />
+              {chart.yKeys.map((yk, i) => (
+                <Area
+                  key={yk.key}
+                  type="monotone"
+                  dataKey={yk.key}
+                  name={yk.label || yk.key}
+                  stroke={getColor(yk, i)}
+                  fill={getColor(yk, i)}
+                  fillOpacity={0.2}
+                  strokeWidth={2}
+                  stackId={chart.stacked ? "stack" : undefined}
+                />
+              ))}
             </AreaChart>
           ) : chart.type === "scatter" ? (
             <ScatterChart>
@@ -163,8 +190,8 @@ export function DataChart({ chart, data }: DataChartProps) {
                 axisLine={axisLineStyle}
               />
               <YAxis
-                dataKey={chart.yKey}
-                name={chart.yKey}
+                dataKey={firstYKey.key}
+                name={firstYKey.label || firstYKey.key}
                 type="number"
                 tick={tickStyle}
                 tickLine={axisLineStyle}
@@ -176,31 +203,13 @@ export function DataChart({ chart, data }: DataChartProps) {
                 contentStyle={tooltipStyle}
               />
               <Legend wrapperStyle={{ color: "var(--chart-axis)" }} />
-              <Scatter name={chart.title} data={chartData} fill="#8b5cf6" />
+              <Scatter name={chart.title} data={chartData} fill={getColor(firstYKey, 0)} />
             </ScatterChart>
-          ) : chart.type === "histogram" ? (
-            <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
-              <XAxis
-                dataKey={chart.xKey}
-                tick={tickStyle}
-                tickLine={axisLineStyle}
-                axisLine={axisLineStyle}
-              />
-              <YAxis
-                tick={tickStyle}
-                tickLine={axisLineStyle}
-                axisLine={axisLineStyle}
-              />
-              <Tooltip contentStyle={tooltipStyle} />
-              <Legend wrapperStyle={{ color: "var(--chart-axis)" }} />
-              <Bar dataKey={chart.yKey} fill="#f59e0b" radius={[2, 2, 0, 0]} />
-            </BarChart>
           ) : (
             <PieChart>
               <Pie
                 data={chartData}
-                dataKey={chart.yKey}
+                dataKey={firstYKey.key}
                 nameKey={chart.xKey}
                 cx="50%"
                 cy="50%"

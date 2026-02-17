@@ -4,12 +4,9 @@ import os
 import re
 import urllib.request
 
-VALID_CHART_TYPES = {"bar", "line", "pie", "area", "scatter", "histogram"}
-
 FALLBACK_RESPONSE = {
     "sql": "",
     "explanation": "I couldn't generate a valid response. Please try rephrasing your question.",
-    "chart": None,
 }
 
 
@@ -44,7 +41,7 @@ RESPONSE FORMAT:
 Always return valid JSON (no markdown code blocks). Use one of these two formats:
 
 1. When the user asks a data question (queries, analysis, aggregations, filters, etc.):
-{{"type": "sql", "sql": "SELECT ...", "explanation": "...", "chart": {{"type": "bar", "xKey": "...", "yKey": "...", "title": "..."}}}}
+{{"type": "sql", "sql": "SELECT ...", "explanation": "..."}}
 
 2. When the user is chatting (greetings, reactions, follow-up clarifications, thanks, etc.):
 {{"type": "chat", "message": "your friendly response here"}}
@@ -54,12 +51,10 @@ RULES:
 2. For casual messages (hi, wow, thanks, ok, etc.), respond conversationally — do NOT generate SQL
 3. Use only SELECT statements (no INSERT/UPDATE/DELETE/DROP)
 4. Always query from "{schema['tableName']}"
-5. For chart, specify: type (bar|line|pie|area), xKey, yKey, title
-6. Only suggest a chart when the data is suitable for visualization (aggregations, comparisons, trends)
-7. Keep SQL concise and readable
-8. Limit results to 100 rows max unless the user asks for more
-9. Use conversation history to understand follow-up questions (e.g. "break that down by month" refers to the previous query)
-10. Do NOT wrap the JSON in markdown code blocks — return raw JSON only"""
+5. Keep SQL concise and readable
+6. Limit results to 100 rows max unless the user asks for more
+7. Use conversation history to understand follow-up questions (e.g. "break that down by month" refers to the previous query)
+8. Do NOT wrap the JSON in markdown code blocks — return raw JSON only"""
 
 
 def parse_llm_response(raw: str) -> dict:
@@ -100,7 +95,7 @@ def parse_llm_response(raw: str) -> dict:
     ):
         message = parsed.get("message", "")
         if isinstance(message, str) and message:
-            return {"sql": "", "explanation": message, "chart": None}
+            return {"sql": "", "explanation": message}
         return dict(FALLBACK_RESPONSE)
 
     # Ensure required keys with defaults
@@ -109,16 +104,8 @@ def parse_llm_response(raw: str) -> dict:
     if "explanation" not in parsed or not isinstance(parsed.get("explanation"), str):
         parsed["explanation"] = parsed.get("explanation", "No explanation provided.")
 
-    # Validate chart config if present
-    chart = parsed.get("chart")
-    if chart is not None:
-        if (
-            not isinstance(chart, dict)
-            or chart.get("type") not in VALID_CHART_TYPES
-            or not isinstance(chart.get("xKey"), str)
-            or not isinstance(chart.get("yKey"), str)
-        ):
-            parsed["chart"] = None
+    # Strip chart if LLM still includes one (we handle charts separately now)
+    parsed.pop("chart", None)
 
     return parsed
 

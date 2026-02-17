@@ -42,6 +42,12 @@ class TestBuildSystemPrompt:
         prompt = build_system_prompt(SAMPLE_SCHEMA)
         assert "conversationally" in prompt.lower() or "casual" in prompt.lower()
 
+    def test_no_chart_in_prompt(self):
+        prompt = build_system_prompt(SAMPLE_SCHEMA)
+        assert "chart" not in prompt.lower()
+        assert "xKey" not in prompt
+        assert "yKey" not in prompt
+
 
 class TestParseLLMResponse:
     def test_valid_json(self):
@@ -60,7 +66,6 @@ class TestParseLLMResponse:
         result = parse_llm_response("this is not json at all")
         assert result["sql"] == ""
         assert "couldn't generate" in result["explanation"].lower()
-        assert result["chart"] is None
 
     def test_missing_keys_adds_defaults(self):
         raw = json.dumps({"sql": "SELECT 1"})
@@ -73,44 +78,25 @@ class TestParseLLMResponse:
         result = parse_llm_response(raw)
         assert result["sql"] == "SELECT 1"
 
-    def test_valid_chart_passes(self):
+    def test_chart_stripped_from_response(self):
+        """LLM may still include chart — parser should strip it."""
         raw = json.dumps({
             "sql": "SELECT x, y FROM t",
             "explanation": "test",
             "chart": {"type": "bar", "xKey": "x", "yKey": "y", "title": "Test"},
         })
         result = parse_llm_response(raw)
-        assert result["chart"]["type"] == "bar"
-
-    def test_invalid_chart_type_nullified(self):
-        raw = json.dumps({
-            "sql": "SELECT 1",
-            "explanation": "test",
-            "chart": {"type": "radar", "xKey": "x", "yKey": "y"},
-        })
-        result = parse_llm_response(raw)
-        assert result["chart"] is None
-
-    def test_chart_missing_keys_nullified(self):
-        raw = json.dumps({
-            "sql": "SELECT 1",
-            "explanation": "test",
-            "chart": {"type": "bar"},
-        })
-        result = parse_llm_response(raw)
-        assert result["chart"] is None
+        assert "chart" not in result
 
     def test_empty_string_returns_fallback(self):
         result = parse_llm_response("")
         assert result["sql"] == ""
-        assert result["chart"] is None
 
     def test_chat_type_response(self):
         raw = json.dumps({"type": "chat", "message": "Hello! How can I help you today?"})
         result = parse_llm_response(raw)
         assert result["sql"] == ""
         assert result["explanation"] == "Hello! How can I help you today?"
-        assert result["chart"] is None
 
     def test_chat_type_with_empty_message_returns_fallback(self):
         raw = json.dumps({"type": "chat", "message": ""})
@@ -123,7 +109,6 @@ class TestParseLLMResponse:
         result = parse_llm_response(raw)
         assert result["sql"] == ""
         assert result["explanation"] == "That's great!"
-        assert result["chart"] is None
 
     def test_sql_type_response(self):
         raw = json.dumps({

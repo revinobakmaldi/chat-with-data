@@ -10,17 +10,17 @@ export interface SchemaInfo {
   rowCount: number;
 }
 
-export interface ChartConfig {
-  type: "bar" | "line" | "pie" | "area" | "scatter" | "histogram";
-  xKey: string;
-  yKey: string;
+export interface ChartSpec {
+  type: "bar" | "line" | "pie" | "area" | "scatter";
   title: string;
+  xKey: string;
+  yKeys: { key: string; label?: string; color?: string }[];
+  stacked?: boolean;
 }
 
 export interface LLMResponse {
   sql: string;
   explanation: string;
-  chart?: ChartConfig;
 }
 
 export interface QueryResult {
@@ -34,7 +34,7 @@ export interface ChatMessage {
   content: string;
   sql?: string;
   queryResult?: QueryResult;
-  chart?: ChartConfig;
+  chart?: ChartSpec;
   error?: string;
   loading?: boolean;
   insights?: InsightItem[];
@@ -60,7 +60,7 @@ export interface InsightItem {
   priority: InsightPriority;
   finding: string;
   sql: string;
-  chart?: ChartConfig;
+  chart?: ChartSpec;
   queryResult?: QueryResult;
 }
 
