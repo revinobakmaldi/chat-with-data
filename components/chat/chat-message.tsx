@@ -4,10 +4,20 @@ import { motion } from "framer-motion";
 import { User, Bot, Loader2 } from "lucide-react";
 import { SqlResult } from "./sql-result";
 import { DataChart } from "./data-chart";
-import type { ChatMessage as ChatMessageType } from "@/lib/types";
+import { InsightCard } from "./insight-card";
+import { InsightsProgress } from "./insights-progress";
+import type { ChatMessage as ChatMessageType, InsightItem } from "@/lib/types";
 
 interface ChatMessageProps {
   message: ChatMessageType;
+}
+
+const priorityOrder: Record<string, number> = { high: 0, medium: 1, low: 2 };
+
+function sortInsightsByPriority(insights: InsightItem[]): InsightItem[] {
+  return [...insights].sort(
+    (a, b) => (priorityOrder[a.priority] ?? 2) - (priorityOrder[b.priority] ?? 2)
+  );
 }
 
 export function ChatMessage({ message }: ChatMessageProps) {
@@ -69,6 +79,22 @@ export function ChatMessage({ message }: ChatMessageProps) {
         {!isUser && message.chart && message.queryResult && !message.loading && (
           <div className="text-left">
             <DataChart chart={message.chart} data={message.queryResult} />
+          </div>
+        )}
+
+        {/* Insights Progress */}
+        {!isUser && message.insightsProgress && message.insightsProgress.phase !== "done" && (
+          <div className="text-left">
+            <InsightsProgress progress={message.insightsProgress} />
+          </div>
+        )}
+
+        {/* Insight Cards */}
+        {!isUser && message.insights && message.insights.length > 0 && !message.loading && (
+          <div className="text-left space-y-3">
+            {sortInsightsByPriority(message.insights).map((insight, i) => (
+              <InsightCard key={`${insight.title}-${i}`} insight={insight} index={i} />
+            ))}
           </div>
         )}
       </div>

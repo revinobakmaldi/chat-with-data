@@ -1,15 +1,16 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Send } from "lucide-react";
+import { Send, Sparkles } from "lucide-react";
 
 interface ChatInputProps {
   onSend: (message: string) => void;
+  onGetInsights?: () => void;
   disabled?: boolean;
   suggestedQuestions?: string[];
 }
 
-export function ChatInput({ onSend, disabled, suggestedQuestions }: ChatInputProps) {
+export function ChatInput({ onSend, onGetInsights, disabled, suggestedQuestions }: ChatInputProps) {
   const [value, setValue] = useState("");
 
   const handleSubmit = useCallback(
@@ -35,6 +36,16 @@ export function ChatInput({ onSend, disabled, suggestedQuestions }: ChatInputPro
     <div className="border-t border-zinc-200/50 dark:border-zinc-800/50 bg-white/80 dark:bg-black/80 backdrop-blur-xl">
       {suggestedQuestions && suggestedQuestions.length > 0 && (
         <div className="flex flex-wrap gap-2 px-4 pt-3">
+          {onGetInsights && (
+            <button
+              onClick={onGetInsights}
+              disabled={disabled}
+              className="flex items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/10 dark:bg-primary/20 px-3 py-1.5 text-xs font-medium text-primary transition-all hover:border-primary/50 hover:bg-primary/20 dark:hover:bg-primary/30 disabled:pointer-events-none disabled:opacity-50"
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              Get Insights
+            </button>
+          )}
           {suggestedQuestions.map((q) => (
             <button
               key={q}
