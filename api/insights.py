@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler
 import json
 import os
 import re
+import sys
 import urllib.request
 
 FALLBACK_PLAN = {"queries": []}
@@ -319,7 +320,12 @@ def call_openrouter(system_prompt: str, user_message: str, max_tokens: int = 102
     with urllib.request.urlopen(req, timeout=60) as resp:
         data = json.loads(resp.read().decode("utf-8"))
 
-    return data["choices"][0]["message"]["content"]
+    choice = data["choices"][0]
+    content = choice["message"]["content"]
+    finish_reason = choice.get("finish_reason", "")
+    if finish_reason == "length":
+        print(f"[insights] WARNING: response truncated (finish_reason=length, len={len(content)})", file=sys.stderr)
+    return content
 
 
 class handler(BaseHTTPRequestHandler):
@@ -359,7 +365,7 @@ class handler(BaseHTTPRequestHandler):
 
     def _handle_plan(self, schema: dict):
         system_prompt = build_plan_prompt(schema)
-        raw = call_openrouter(system_prompt, "Analyze this dataset and create an analysis plan.", max_tokens=1024)
+        raw = call_openrouter(system_prompt, "Analyze this dataset and create an analysis plan.", max_tokens=4096)
         result = parse_plan_response(raw)
         self._send_json(200, result)
 
