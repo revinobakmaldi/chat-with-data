@@ -35,145 +35,80 @@ class TestBuildVisualizePrompt:
         many_rows = [{"region": f"r{i}", "revenue": i, "cost": i} for i in range(100)]
         prompt = build_visualize_prompt("q", "SELECT ...", SAMPLE_COLUMNS, many_rows)
         assert "100 total rows, showing up to 50" in prompt
-        # Should not contain row 50+ data in the table
         assert "r50" not in prompt
 
-    def test_describes_ykeys_format(self):
+    def test_contains_recharts_scope_doc(self):
         prompt = build_visualize_prompt("q", "SELECT ...", SAMPLE_COLUMNS, SAMPLE_ROWS)
-        assert "yKeys" in prompt
+        assert "ResponsiveContainer" in prompt
+        assert "COLORS" in prompt
+        assert "tooltipStyle" in prompt
+
+    def test_asks_for_jsx(self):
+        prompt = build_visualize_prompt("q", "SELECT ...", SAMPLE_COLUMNS, SAMPLE_ROWS)
+        assert "chartCode" in prompt
 
 
 class TestParseVisualizeResponse:
-    def test_valid_chart_spec(self):
+    def test_valid_chart_code(self):
         raw = json.dumps({
-            "chart": {
-                "type": "bar",
-                "title": "Revenue by Region",
-                "xKey": "region",
-                "yKeys": [{"key": "revenue", "label": "Revenue"}],
-                "stacked": False,
-            }
+            "chartCode": '<ResponsiveContainer width="100%" height="100%"><BarChart data={data}><Bar dataKey="revenue" /></BarChart></ResponsiveContainer>',
+            "chartTitle": "Revenue by Region",
         })
         result = parse_visualize_response(raw)
-        chart = result["chart"]
-        assert chart is not None
-        assert chart["type"] == "bar"
-        assert chart["xKey"] == "region"
-        assert len(chart["yKeys"]) == 1
-        assert chart["yKeys"][0]["key"] == "revenue"
-        assert chart["stacked"] is False
+        assert result["chartCode"] is not None
+        assert "BarChart" in result["chartCode"]
+        assert result["chartTitle"] == "Revenue by Region"
 
-    def test_multi_series(self):
-        raw = json.dumps({
-            "chart": {
-                "type": "bar",
-                "title": "Revenue vs Cost",
-                "xKey": "region",
-                "yKeys": [
-                    {"key": "revenue", "label": "Revenue"},
-                    {"key": "cost", "label": "Cost"},
-                ],
-                "stacked": True,
-            }
-        })
+    def test_null_chart_code(self):
+        raw = json.dumps({"chartCode": None})
         result = parse_visualize_response(raw)
-        chart = result["chart"]
-        assert chart is not None
-        assert len(chart["yKeys"]) == 2
-        assert chart["stacked"] is True
+        assert result["chartCode"] is None
 
-    def test_null_chart(self):
-        raw = json.dumps({"chart": None})
+    def test_missing_chart_code(self):
+        raw = json.dumps({"something": "else"})
         result = parse_visualize_response(raw)
-        assert result["chart"] is None
+        assert result["chartCode"] is None
 
-    def test_invalid_chart_type(self):
-        raw = json.dumps({
-            "chart": {
-                "type": "radar",
-                "title": "Test",
-                "xKey": "x",
-                "yKeys": [{"key": "y"}],
-            }
-        })
+    def test_empty_string_chart_code(self):
+        raw = json.dumps({"chartCode": ""})
         result = parse_visualize_response(raw)
-        assert result["chart"] is None
+        assert result["chartCode"] is None
 
-    def test_missing_xkey(self):
-        raw = json.dumps({
-            "chart": {
-                "type": "bar",
-                "title": "Test",
-                "yKeys": [{"key": "y"}],
-            }
-        })
+    def test_whitespace_only_chart_code(self):
+        raw = json.dumps({"chartCode": "   "})
         result = parse_visualize_response(raw)
-        assert result["chart"] is None
-
-    def test_empty_ykeys(self):
-        raw = json.dumps({
-            "chart": {
-                "type": "bar",
-                "title": "Test",
-                "xKey": "x",
-                "yKeys": [],
-            }
-        })
-        result = parse_visualize_response(raw)
-        assert result["chart"] is None
-
-    def test_invalid_ykeys_entries_filtered(self):
-        raw = json.dumps({
-            "chart": {
-                "type": "bar",
-                "title": "Test",
-                "xKey": "x",
-                "yKeys": [{"key": "y"}, {"bad": "entry"}, "not_an_object"],
-            }
-        })
-        result = parse_visualize_response(raw)
-        chart = result["chart"]
-        assert chart is not None
-        assert len(chart["yKeys"]) == 1
-        assert chart["yKeys"][0]["key"] == "y"
+        assert result["chartCode"] is None
 
     def test_markdown_wrapped(self):
-        raw = '```json\n{"chart": {"type": "line", "title": "T", "xKey": "x", "yKeys": [{"key": "y"}]}}\n```'
+        inner = json.dumps({
+            "chartCode": '<ResponsiveContainer width="100%" height="100%"><LineChart data={data}><Line dataKey="revenue" /></LineChart></ResponsiveContainer>',
+            "chartTitle": "T",
+        })
+        raw = f"```json\n{inner}\n```"
         result = parse_visualize_response(raw)
-        assert result["chart"] is not None
-        assert result["chart"]["type"] == "line"
+        assert result["chartCode"] is not None
+        assert "LineChart" in result["chartCode"]
 
     def test_invalid_json_returns_null(self):
         result = parse_visualize_response("this is not json")
-        assert result["chart"] is None
+        assert result["chartCode"] is None
 
     def test_empty_string_returns_null(self):
         result = parse_visualize_response("")
-        assert result["chart"] is None
-
-    def test_ykeys_with_optional_fields(self):
-        raw = json.dumps({
-            "chart": {
-                "type": "bar",
-                "title": "Test",
-                "xKey": "x",
-                "yKeys": [{"key": "y", "label": "Y Value", "color": "#ff0000"}],
-            }
-        })
-        result = parse_visualize_response(raw)
-        chart = result["chart"]
-        assert chart is not None
-        assert chart["yKeys"][0]["label"] == "Y Value"
-        assert chart["yKeys"][0]["color"] == "#ff0000"
+        assert result["chartCode"] is None
 
     def test_missing_title_gets_default(self):
         raw = json.dumps({
-            "chart": {
-                "type": "bar",
-                "xKey": "x",
-                "yKeys": [{"key": "y"}],
-            }
+            "chartCode": '<ResponsiveContainer width="100%" height="100%"><BarChart data={data}><Bar dataKey="y" /></BarChart></ResponsiveContainer>',
         })
         result = parse_visualize_response(raw)
-        assert result["chart"] is not None
-        assert result["chart"]["title"] == "Chart"
+        assert result["chartCode"] is not None
+        assert result["chartTitle"] == "Chart"
+
+    def test_non_string_title_gets_default(self):
+        raw = json.dumps({
+            "chartCode": '<ResponsiveContainer width="100%" height="100%"><BarChart data={data}><Bar dataKey="y" /></BarChart></ResponsiveContainer>',
+            "chartTitle": 123,
+        })
+        result = parse_visualize_response(raw)
+        assert result["chartTitle"] == "Chart"

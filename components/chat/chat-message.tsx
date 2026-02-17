@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { User, Bot, Loader2 } from "lucide-react";
 import { SqlResult } from "./sql-result";
-import { DataChart } from "./data-chart";
+import { DynamicChart } from "./dynamic-chart";
 import { InsightCard } from "./insight-card";
 import { InsightsProgress } from "./insights-progress";
 import type { ChatMessage as ChatMessageType, InsightItem } from "@/lib/types";
@@ -76,9 +76,13 @@ export function ChatMessage({ message }: ChatMessageProps) {
         )}
 
         {/* Chart */}
-        {!isUser && message.chart && message.queryResult && !message.loading && (
+        {!isUser && message.chartCode && message.queryResult && !message.loading && (
           <div className="text-left">
-            <DataChart chart={message.chart} data={message.queryResult} />
+            <DynamicChart
+              code={message.chartCode}
+              data={message.queryResult.rows}
+              title={message.chartTitle}
+            />
           </div>
         )}
 

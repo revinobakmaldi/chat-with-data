@@ -1,4 +1,4 @@
-import type { SchemaInfo, LLMResponse, ChartSpec, ChatMessage } from "./types";
+import type { SchemaInfo, LLMResponse, ChatMessage } from "./types";
 
 export function validateLLMResponse(data: unknown): LLMResponse {
   if (typeof data !== "object" || data === null) {
@@ -41,46 +41,12 @@ export async function sendChatMessage(
   return validateLLMResponse(json);
 }
 
-const VALID_CHART_TYPES = new Set(["bar", "line", "pie", "area", "scatter"]);
-
-function validateChartSpec(data: unknown): ChartSpec | null {
-  if (typeof data !== "object" || data === null) return null;
-
-  const obj = data as Record<string, unknown>;
-  if (!VALID_CHART_TYPES.has(obj.type as string)) return null;
-  if (typeof obj.xKey !== "string") return null;
-  if (typeof obj.title !== "string") return null;
-
-  const yKeys = obj.yKeys;
-  if (!Array.isArray(yKeys) || yKeys.length === 0) return null;
-
-  const validYKeys: ChartSpec["yKeys"] = [];
-  for (const yk of yKeys) {
-    if (typeof yk === "object" && yk !== null && typeof (yk as Record<string, unknown>).key === "string") {
-      const entry: ChartSpec["yKeys"][number] = { key: (yk as Record<string, unknown>).key as string };
-      if (typeof (yk as Record<string, unknown>).label === "string") entry.label = (yk as Record<string, unknown>).label as string;
-      if (typeof (yk as Record<string, unknown>).color === "string") entry.color = (yk as Record<string, unknown>).color as string;
-      validYKeys.push(entry);
-    }
-  }
-
-  if (validYKeys.length === 0) return null;
-
-  return {
-    type: obj.type as ChartSpec["type"],
-    title: obj.title,
-    xKey: obj.xKey,
-    yKeys: validYKeys,
-    stacked: typeof obj.stacked === "boolean" ? obj.stacked : false,
-  };
-}
-
 export async function requestVisualization(
   question: string,
   sql: string,
   columns: string[],
   rows: Record<string, unknown>[]
-): Promise<ChartSpec | null> {
+): Promise<{ chartCode: string | null; chartTitle: string }> {
   // Cap rows to first 50 before sending
   const cappedRows = rows.slice(0, 50);
 
@@ -92,13 +58,15 @@ export async function requestVisualization(
 
   if (!res.ok) {
     console.warn("[visualize] request failed:", res.status, await res.text().catch(() => ""));
-    return null;
+    return { chartCode: null, chartTitle: "" };
   }
 
   const json = await res.json();
-  const spec = validateChartSpec(json.chart);
-  if (!spec) {
-    console.warn("[visualize] no valid chart spec returned:", JSON.stringify(json));
+  const chartCode = typeof json.chartCode === "string" ? json.chartCode : null;
+  const chartTitle = typeof json.chartTitle === "string" ? json.chartTitle : "Chart";
+
+  if (!chartCode) {
+    console.warn("[visualize] no chart code returned:", JSON.stringify(json));
   }
-  return spec;
+  return { chartCode, chartTitle };
 }

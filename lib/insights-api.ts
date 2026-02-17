@@ -7,7 +7,6 @@ import type {
   QueryResult,
 } from "./types";
 
-const VALID_CHART_TYPES = new Set(["bar", "line", "pie", "area", "scatter"]);
 const VALID_PRIORITIES = new Set(["high", "medium", "low"]);
 
 export function validatePlanResponse(data: unknown): AnalysisPlanResponse {
@@ -79,41 +78,10 @@ export function validateInsightsResponse(data: unknown): InsightsResponse {
       sql: typeof i.sql === "string" ? i.sql : "",
     };
 
-    if (typeof i.chart === "object" && i.chart !== null) {
-      const chart = i.chart as Record<string, unknown>;
-      if (
-        VALID_CHART_TYPES.has(chart.type as string) &&
-        typeof chart.xKey === "string"
-      ) {
-        let yKeysRaw = chart.yKeys;
-        // Support legacy single yKey format
-        if (!Array.isArray(yKeysRaw) || yKeysRaw.length === 0) {
-          if (typeof chart.yKey === "string") {
-            yKeysRaw = [{ key: chart.yKey }];
-          } else {
-            yKeysRaw = [];
-          }
-        }
-
-        const validYKeys: NonNullable<InsightItem["chart"]>["yKeys"] = [];
-        for (const yk of yKeysRaw as Record<string, unknown>[]) {
-          if (typeof yk === "object" && yk !== null && typeof yk.key === "string") {
-            const ykEntry: { key: string; label?: string; color?: string } = { key: yk.key };
-            if (typeof yk.label === "string") ykEntry.label = yk.label;
-            if (typeof yk.color === "string") ykEntry.color = yk.color;
-            validYKeys.push(ykEntry);
-          }
-        }
-
-        if (validYKeys.length > 0) {
-          entry.chart = {
-            type: chart.type as NonNullable<InsightItem["chart"]>["type"],
-            title: typeof chart.title === "string" ? chart.title : i.title,
-            xKey: chart.xKey,
-            yKeys: validYKeys,
-            stacked: typeof chart.stacked === "boolean" ? chart.stacked : false,
-          };
-        }
+    if (typeof i.chartCode === "string" && i.chartCode.trim()) {
+      entry.chartCode = i.chartCode;
+      if (typeof i.chartTitle === "string" && i.chartTitle.trim()) {
+        entry.chartTitle = i.chartTitle;
       }
     }
 

@@ -13,7 +13,6 @@ import type {
   ChatMessage as ChatMessageType,
   LLMResponse,
   QueryResult,
-  ChartSpec,
 } from "@/lib/types";
 
 interface ChatContainerProps {
@@ -68,7 +67,8 @@ export function ChatContainer({ schema }: ChatContainerProps) {
 
         let queryResult: QueryResult | undefined;
         let queryError: string | undefined;
-        let chartSpec: ChartSpec | undefined;
+        let chartCode: string | undefined;
+        let chartTitle: string | undefined;
 
         if (llmResponse.sql) {
           try {
@@ -78,16 +78,19 @@ export function ChatContainer({ schema }: ChatContainerProps) {
               err instanceof Error ? err.message : "SQL execution failed";
           }
 
-          // Phase 2: ask LLM to generate chart spec based on actual results
+          // Phase 2: ask LLM to generate chart JSX based on actual results
           if (queryResult && queryResult.rows.length > 0) {
             try {
-              const chart = await requestVisualization(
+              const viz = await requestVisualization(
                 content,
                 llmResponse.sql,
                 queryResult.columns,
                 queryResult.rows
               );
-              if (chart) chartSpec = chart;
+              if (viz.chartCode) {
+                chartCode = viz.chartCode;
+                chartTitle = viz.chartTitle;
+              }
             } catch {
               // Chart generation failure is non-critical
             }
@@ -101,7 +104,8 @@ export function ChatContainer({ schema }: ChatContainerProps) {
                   ...m,
                   content: llmResponse.explanation,
                   sql: llmResponse.sql,
-                  chart: chartSpec,
+                  chartCode,
+                  chartTitle,
                   queryResult,
                   error: queryError,
                   loading: false,

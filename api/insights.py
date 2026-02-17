@@ -10,7 +10,14 @@ FALLBACK_INSIGHTS = {
     "summary": "Unable to generate insights. Please try again.",
     "insights": [],
 }
-VALID_CHART_TYPES = {"bar", "line", "pie", "area", "scatter"}
+
+RECHARTS_SCOPE_DOC = """AVAILABLE SCOPE for chartCode (these variables/components are already in scope — do NOT import anything):
+- data: array of objects with the query result rows
+- Recharts components: ResponsiveContainer, BarChart, Bar, LineChart, Line, AreaChart, Area,
+  PieChart, Pie, ScatterChart, Scatter, Cell, XAxis, YAxis, ZAxis, CartesianGrid, Tooltip, Legend,
+  RadialBarChart, RadialBar, ComposedChart, Treemap, Funnel, FunnelChart
+- Style helpers: COLORS (array of 8 hex colors), tooltipStyle (object), tickStyle (object),
+  axisLineStyle (object), gridStroke (string)"""
 
 
 def build_plan_prompt(schema: dict) -> str:
@@ -93,6 +100,8 @@ COLUMNS:
 QUERY RESULTS:
 {results_text}
 
+{RECHARTS_SCOPE_DOC}
+
 Return ONLY valid JSON (no markdown fences) with this structure:
 {{
   "summary": "2-3 sentence executive summary of the dataset",
@@ -102,13 +111,8 @@ Return ONLY valid JSON (no markdown fences) with this structure:
       "priority": "high|medium|low",
       "finding": "Detailed explanation of the insight and its business implications",
       "sql": "The SQL query that produced this insight",
-      "chart": {{
-        "type": "bar|line|pie|area|scatter",
-        "title": "Chart title",
-        "xKey": "column_name",
-        "yKeys": [{{"key": "column_name", "label": "Display label"}}],
-        "stacked": false
-      }}
+      "chartCode": "<ResponsiveContainer width=\\"100%\\" height=\\"100%\\">...</ResponsiveContainer>",
+      "chartTitle": "Chart title"
     }}
   ]
 }}
@@ -116,9 +120,13 @@ Return ONLY valid JSON (no markdown fences) with this structure:
 RULES:
 1. Produce 3-6 insights, sorted by business impact (high priority first)
 2. Each insight must reference actual data from the results
-3. Only include "chart" when the data is genuinely suitable for visualization
-4. Priority: "high" = actionable/critical, "medium" = notable patterns, "low" = informational
-5. Return raw JSON only, no markdown code blocks"""
+3. Only include "chartCode" when the data is genuinely suitable for visualization — set to null otherwise
+4. chartCode must be a SINGLE JSX expression wrapped in <ResponsiveContainer width="100%" height="100%">
+5. Use the `data` variable in chartCode — it contains the query result rows
+6. Use COLORS[i] for fill/stroke, tooltipStyle/tickStyle/axisLineStyle/gridStroke for styling
+7. Column names in dataKey props must exactly match the query result columns
+8. Priority: "high" = actionable/critical, "medium" = notable patterns, "low" = informational
+9. Return raw JSON only, no markdown code blocks"""
 
 
 def _extract_json_object(text: str) -> dict | None:
@@ -274,38 +282,12 @@ def parse_insights_response(raw: str) -> dict:
             "sql": item.get("sql", ""),
         }
 
-        chart = item.get("chart")
-        if isinstance(chart, dict):
-            if (
-                chart.get("type") in VALID_CHART_TYPES
-                and isinstance(chart.get("xKey"), str)
-            ):
-                y_keys_raw = chart.get("yKeys", [])
-                # Support legacy single yKey format
-                if not isinstance(y_keys_raw, list) or len(y_keys_raw) == 0:
-                    if isinstance(chart.get("yKey"), str):
-                        y_keys_raw = [{"key": chart["yKey"]}]
-                    else:
-                        y_keys_raw = []
-
-                valid_y_keys = []
-                for yk in y_keys_raw:
-                    if isinstance(yk, dict) and isinstance(yk.get("key"), str):
-                        yk_entry = {"key": yk["key"]}
-                        if isinstance(yk.get("label"), str):
-                            yk_entry["label"] = yk["label"]
-                        if isinstance(yk.get("color"), str):
-                            yk_entry["color"] = yk["color"]
-                        valid_y_keys.append(yk_entry)
-
-                if valid_y_keys:
-                    entry["chart"] = {
-                        "type": chart["type"],
-                        "title": chart.get("title", item["title"]),
-                        "xKey": chart["xKey"],
-                        "yKeys": valid_y_keys,
-                        "stacked": bool(chart.get("stacked", False)),
-                    }
+        chart_code = item.get("chartCode")
+        if isinstance(chart_code, str) and chart_code.strip():
+            entry["chartCode"] = chart_code
+            chart_title = item.get("chartTitle")
+            if isinstance(chart_title, str) and chart_title.strip():
+                entry["chartTitle"] = chart_title
 
         valid.append(entry)
 

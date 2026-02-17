@@ -10,7 +10,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { SqlResult } from "./sql-result";
-import { DataChart } from "./data-chart";
+import { DynamicChart } from "./dynamic-chart";
 import type { InsightItem } from "@/lib/types";
 
 interface InsightCardProps {
@@ -75,9 +75,13 @@ export function InsightCard({ insight, index }: InsightCardProps) {
         </div>
 
         {/* Chart */}
-        {insight.chart && insight.queryResult && (
+        {insight.chartCode && insight.queryResult && (
           <div className="mt-3">
-            <DataChart chart={insight.chart} data={insight.queryResult} />
+            <DynamicChart
+              code={insight.chartCode}
+              data={insight.queryResult.rows}
+              title={insight.chartTitle}
+            />
           </div>
         )}
 
