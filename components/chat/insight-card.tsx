@@ -75,11 +75,10 @@ export function InsightCard({ insight, index }: InsightCardProps) {
         </div>
 
         {/* Chart */}
-        {insight.chartCode && insight.queryResult && (
+        {insight.plotlySpec && (
           <div className="mt-3">
             <DynamicChart
-              code={insight.chartCode}
-              data={insight.queryResult.rows}
+              spec={insight.plotlySpec}
               title={insight.chartTitle}
             />
           </div>

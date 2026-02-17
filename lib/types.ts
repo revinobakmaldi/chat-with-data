@@ -26,7 +26,7 @@ export interface ChatMessage {
   content: string;
   sql?: string;
   queryResult?: QueryResult;
-  chartCode?: string;
+  plotlySpec?: Record<string, unknown>;
   chartTitle?: string;
   error?: string;
   loading?: boolean;
@@ -53,7 +53,7 @@ export interface InsightItem {
   priority: InsightPriority;
   finding: string;
   sql: string;
-  chartCode?: string;
+  plotlySpec?: Record<string, unknown>;
   chartTitle?: string;
   queryResult?: QueryResult;
 }

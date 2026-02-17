@@ -1,18 +1,26 @@
 from http.server import BaseHTTPRequestHandler
 import json
 import os
-import re
 import sys
+import traceback
 import urllib.request
 
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 
-RECHARTS_SCOPE_DOC = """AVAILABLE SCOPE (these variables/components are already in scope — do NOT import anything):
-- data: array of objects with the query result rows
-- Recharts components: ResponsiveContainer, BarChart, Bar, LineChart, Line, AreaChart, Area,
-  PieChart, Pie, ScatterChart, Scatter, Cell, XAxis, YAxis, ZAxis, CartesianGrid, Tooltip, Legend,
-  RadialBarChart, RadialBar, ComposedChart, Treemap, Funnel, FunnelChart
-- Style helpers: COLORS (array of 8 hex colors), tooltipStyle (object), tickStyle (object),
-  axisLineStyle (object), gridStroke (string)"""
+
+PLOTLY_SCOPE_DOC = """AVAILABLE SCOPE (these variables are already defined — do NOT import anything):
+- df: a pandas DataFrame containing the query result rows
+- pd: the pandas module
+- px: plotly.express
+- go: plotly.graph_objects
+
+You MUST produce a variable called `fig` (a plotly Figure object).
+You CAN manipulate df freely: pivot_table, melt, groupby, sort_values, etc.
+Use px.imshow for heatmaps/matrices, px.bar for bar charts, px.line for line charts, etc.
+Apply fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)") for transparent backgrounds.
+Use template="plotly_dark" for dark-mode-friendly defaults."""
 
 
 def build_visualize_prompt(question: str, sql: str, columns: list, rows: list) -> str:
@@ -24,7 +32,7 @@ def build_visualize_prompt(question: str, sql: str, columns: list, rows: list) -
         row_lines.append(f"| {vals} |")
     rows_text = "\n".join(row_lines)
 
-    return f"""You are a data visualization expert. Given query results, decide if a chart is appropriate and write Recharts JSX code to render it.
+    return f"""You are a data visualization expert. Given query results, decide if a chart is appropriate and write Python code using pandas and plotly to render it.
 
 USER QUESTION: {question}
 SQL QUERY: {sql}
@@ -34,26 +42,28 @@ Columns: {', '.join(columns)}
 | {header} |
 {rows_text}
 
-{RECHARTS_SCOPE_DOC}
+{PLOTLY_SCOPE_DOC}
 
-If the data is suitable for visualization, return a JSON object with "chartCode" containing a single JSX expression wrapped in <ResponsiveContainer width="100%" height="100%">...</ResponsiveContainer>.
-If not (e.g., single scalar value, too many categories, or text-heavy results), return {{"chartCode": null}}.
+If the data is suitable for visualization, return a JSON object with "pythonCode" containing Python code that creates a `fig` variable.
+If not (e.g., single scalar value, too many categories, or text-heavy results), return {{"pythonCode": null}}.
 
 Return ONLY valid JSON (no markdown fences) with this structure:
-{{"chartCode": "<ResponsiveContainer width=\\"100%\\" height=\\"100%\\">...</ResponsiveContainer>", "chartTitle": "Chart title"}}
+{{"pythonCode": "pivot = df.pivot_table(...)\\nfig = px.bar(...)", "chartTitle": "Chart title"}}
 
 Or if no chart is appropriate:
-{{"chartCode": null}}
+{{"pythonCode": null}}
 
 RULES:
-1. The JSX expression must be a SINGLE expression (no semicolons, no variable declarations, no imports)
-2. Use the `data` variable directly — it contains the query result rows
-3. Column names in dataKey props must exactly match the query result columns: {', '.join(columns)}
-4. Use COLORS[i] for fill/stroke colors (e.g., COLORS[0], COLORS[1], etc.)
-5. Use tooltipStyle, tickStyle, axisLineStyle, gridStroke for consistent styling
-6. Use "pie" only when there are fewer than 8 categories
-7. Use "line" for time-series or sequential data
-8. Return raw JSON only, no markdown code blocks"""
+1. The code must assign a plotly Figure to a variable called `fig`
+2. Use `df` directly — it is a pandas DataFrame with the query result rows
+3. Column names must exactly match: {', '.join(columns)}
+4. You can freely transform df (pivot_table, melt, groupby, etc.) before charting
+5. For matrix/heatmap visualizations, use px.imshow with df.pivot_table(...)
+6. Apply transparent backgrounds: fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+7. Use template="plotly_dark" in the figure creation for dark-mode compatibility
+8. Use "pie" only when there are fewer than 8 categories
+9. Use line charts for time-series or sequential data
+10. Return raw JSON only, no markdown code blocks"""
 
 
 def parse_visualize_response(raw: str) -> dict:
@@ -66,6 +76,7 @@ def parse_visualize_response(raw: str) -> dict:
             lines = lines[:-1]
         text = "\n".join(lines).strip()
 
+    import re
     parsed = None
     try:
         parsed = json.loads(text)
@@ -78,17 +89,40 @@ def parse_visualize_response(raw: str) -> dict:
                 pass
 
     if not isinstance(parsed, dict):
-        return {"chartCode": None}
+        return {"pythonCode": None}
 
-    chart_code = parsed.get("chartCode")
-    if not isinstance(chart_code, str) or not chart_code.strip():
-        return {"chartCode": None}
+    python_code = parsed.get("pythonCode")
+    if not isinstance(python_code, str) or not python_code.strip():
+        return {"pythonCode": None}
 
     chart_title = parsed.get("chartTitle", "Chart")
     if not isinstance(chart_title, str):
         chart_title = "Chart"
 
-    return {"chartCode": chart_code, "chartTitle": chart_title}
+    return {"pythonCode": python_code, "chartTitle": chart_title}
+
+
+def execute_plot_code(python_code: str, df: pd.DataFrame) -> dict:
+    """Execute LLM-generated Python code in a restricted sandbox and return Plotly JSON."""
+    allowed_globals = {
+        "__builtins__": {},
+        "pd": pd,
+        "px": px,
+        "go": go,
+        "df": df,
+        "print": lambda *a, **k: None,
+    }
+
+    exec(python_code, allowed_globals)
+
+    fig = allowed_globals.get("fig")
+    if fig is None:
+        raise ValueError("Code did not produce a `fig` variable")
+
+    if not isinstance(fig, go.Figure):
+        raise ValueError(f"fig is not a plotly Figure (got {type(fig).__name__})")
+
+    return json.loads(fig.to_json())
 
 
 def call_openrouter(system_prompt: str, user_message: str) -> str:
@@ -135,16 +169,31 @@ class handler(BaseHTTPRequestHandler):
             rows = data.get("rows", [])
 
             if not columns or not rows:
-                self._send_json(200, {"chartCode": None})
+                self._send_json(200, {"plotlySpec": None})
                 return
 
             system_prompt = build_visualize_prompt(question, sql, columns, rows)
-            raw = call_openrouter(system_prompt, "Generate Recharts JSX code for these query results.")
+            raw = call_openrouter(system_prompt, "Generate Python visualization code for these query results.")
             print(f"[visualize] raw LLM response ({len(raw)} chars): {raw[:500]}", file=sys.stderr)
             result = parse_visualize_response(raw)
-            print(f"[visualize] parsed result: chartCode={'present' if result.get('chartCode') else 'null'}", file=sys.stderr)
+            print(f"[visualize] parsed result: pythonCode={'present' if result.get('pythonCode') else 'null'}", file=sys.stderr)
 
-            self._send_json(200, result)
+            python_code = result.get("pythonCode")
+            if not python_code:
+                self._send_json(200, {"plotlySpec": None})
+                return
+
+            # Execute the Python code to produce a Plotly figure
+            df = pd.DataFrame(rows, columns=columns)
+            try:
+                plotly_spec = execute_plot_code(python_code, df)
+            except Exception as e:
+                print(f"[visualize] exec error: {traceback.format_exc()}", file=sys.stderr)
+                self._send_json(200, {"plotlySpec": None, "error": f"Chart code execution failed: {str(e)}"})
+                return
+
+            chart_title = result.get("chartTitle", "Chart")
+            self._send_json(200, {"plotlySpec": plotly_spec, "chartTitle": chart_title})
 
         except json.JSONDecodeError:
             self._send_error(400, "Invalid JSON in request body")

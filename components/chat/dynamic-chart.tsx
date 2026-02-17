@@ -1,98 +1,40 @@
 "use client";
 
+import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { LiveProvider, LivePreview, LiveError } from "react-live";
-import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
-  AreaChart,
-  Area,
-  PieChart,
-  Pie,
-  ScatterChart,
-  Scatter,
-  Cell,
-  XAxis,
-  YAxis,
-  ZAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  RadialBarChart,
-  RadialBar,
-  ComposedChart,
-  Treemap,
-  Funnel,
-  FunnelChart,
-} from "recharts";
+import dynamic from "next/dynamic";
+
+const Plot = dynamic(
+  () =>
+    Promise.all([
+      import("plotly.js-dist-min"),
+      import("react-plotly.js/factory"),
+    ]).then(([Plotly, factory]) => ({
+      default: factory.default(Plotly.default),
+    })),
+  { ssr: false }
+);
 
 interface DynamicChartProps {
-  code: string;
-  data: Record<string, unknown>[];
+  spec: Record<string, unknown>;
   title?: string;
 }
 
-const COLORS = [
-  "#10b981",
-  "#3b82f6",
-  "#14b8a6",
-  "#8b5cf6",
-  "#f59e0b",
-  "#ef4444",
-  "#ec4899",
-  "#06b6d4",
-];
+export function DynamicChart({ spec, title }: DynamicChartProps) {
+  const { data, layout } = useMemo(() => {
+    const plotData = (spec.data ?? []) as Plotly.Data[];
+    const plotLayout = {
+      ...(spec.layout as Record<string, unknown> ?? {}),
+      paper_bgcolor: "rgba(0,0,0,0)",
+      plot_bgcolor: "rgba(0,0,0,0)",
+      font: { color: "var(--chart-axis, #a1a1aa)" },
+      autosize: true,
+      margin: { l: 50, r: 20, t: 30, b: 50 },
+    };
+    return { data: plotData, layout: plotLayout };
+  }, [spec]);
 
-const tooltipStyle = {
-  backgroundColor: "var(--chart-tooltip-bg)",
-  border: "1px solid var(--chart-tooltip-border)",
-  borderRadius: "8px",
-  color: "var(--chart-tooltip-text)",
-};
-
-const tickStyle = { fill: "var(--chart-axis)", fontSize: 12 };
-const axisLineStyle = { stroke: "var(--chart-axis-line)" };
-const gridStroke = "var(--chart-grid)";
-
-const scope = {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
-  AreaChart,
-  Area,
-  PieChart,
-  Pie,
-  ScatterChart,
-  Scatter,
-  Cell,
-  XAxis,
-  YAxis,
-  ZAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  RadialBarChart,
-  RadialBar,
-  ComposedChart,
-  Treemap,
-  Funnel,
-  FunnelChart,
-  COLORS,
-  tooltipStyle,
-  tickStyle,
-  axisLineStyle,
-  gridStroke,
-};
-
-export function DynamicChart({ code, data, title }: DynamicChartProps) {
-  if (!data.length || !code) return null;
-
-  const fullScope = { ...scope, data };
+  if (!data || (Array.isArray(data) && data.length === 0)) return null;
 
   return (
     <motion.div
@@ -106,10 +48,13 @@ export function DynamicChart({ code, data, title }: DynamicChartProps) {
         </h4>
       )}
       <div className="h-64">
-        <LiveProvider code={code} scope={fullScope} noInline={false}>
-          <LivePreview Component="div" className="h-full w-full" />
-          <LiveError className="text-sm text-red-500 dark:text-red-400 mt-2" />
-        </LiveProvider>
+        <Plot
+          data={data}
+          layout={layout}
+          config={{ displayModeBar: false, responsive: true }}
+          useResizeHandler
+          style={{ width: "100%", height: "100%" }}
+        />
       </div>
     </motion.div>
   );

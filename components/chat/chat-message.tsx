@@ -76,11 +76,10 @@ export function ChatMessage({ message }: ChatMessageProps) {
         )}
 
         {/* Chart */}
-        {!isUser && message.chartCode && message.queryResult && !message.loading && (
+        {!isUser && message.plotlySpec && !message.loading && (
           <div className="text-left">
             <DynamicChart
-              code={message.chartCode}
-              data={message.queryResult.rows}
+              spec={message.plotlySpec}
               title={message.chartTitle}
             />
           </div>

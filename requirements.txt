@@ -1,2 +1,2 @@
-# No external dependencies needed — uses only Python stdlib
-# (http.server, json, urllib, os)
+pandas
+plotly

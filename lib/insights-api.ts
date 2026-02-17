@@ -78,8 +78,8 @@ export function validateInsightsResponse(data: unknown): InsightsResponse {
       sql: typeof i.sql === "string" ? i.sql : "",
     };
 
-    if (typeof i.chartCode === "string" && i.chartCode.trim()) {
-      entry.chartCode = i.chartCode;
+    if (typeof i.plotlySpec === "object" && i.plotlySpec !== null) {
+      entry.plotlySpec = i.plotlySpec as Record<string, unknown>;
       if (typeof i.chartTitle === "string" && i.chartTitle.trim()) {
         entry.chartTitle = i.chartTitle;
       }

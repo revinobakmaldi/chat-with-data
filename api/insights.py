@@ -3,7 +3,12 @@ import json
 import os
 import re
 import sys
+import traceback
 import urllib.request
+
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 
 FALLBACK_PLAN = {"queries": []}
 FALLBACK_INSIGHTS = {
@@ -11,13 +16,17 @@ FALLBACK_INSIGHTS = {
     "insights": [],
 }
 
-RECHARTS_SCOPE_DOC = """AVAILABLE SCOPE for chartCode (these variables/components are already in scope — do NOT import anything):
-- data: array of objects with the query result rows
-- Recharts components: ResponsiveContainer, BarChart, Bar, LineChart, Line, AreaChart, Area,
-  PieChart, Pie, ScatterChart, Scatter, Cell, XAxis, YAxis, ZAxis, CartesianGrid, Tooltip, Legend,
-  RadialBarChart, RadialBar, ComposedChart, Treemap, Funnel, FunnelChart
-- Style helpers: COLORS (array of 8 hex colors), tooltipStyle (object), tickStyle (object),
-  axisLineStyle (object), gridStroke (string)"""
+PLOTLY_SCOPE_DOC = """AVAILABLE SCOPE for visualization code (these variables are already defined — do NOT import anything):
+- df: a pandas DataFrame containing the query result rows for this insight
+- pd: the pandas module
+- px: plotly.express
+- go: plotly.graph_objects
+
+You MUST produce a variable called `fig` (a plotly Figure object).
+You CAN manipulate df freely: pivot_table, melt, groupby, sort_values, etc.
+Use px.imshow for heatmaps/matrices, px.bar for bar charts, px.line for line charts, etc.
+Apply fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)") for transparent backgrounds.
+Use template="plotly_dark" for dark-mode-friendly defaults."""
 
 
 def build_plan_prompt(schema: dict) -> str:
@@ -100,7 +109,7 @@ COLUMNS:
 QUERY RESULTS:
 {results_text}
 
-{RECHARTS_SCOPE_DOC}
+{PLOTLY_SCOPE_DOC}
 
 Return ONLY valid JSON (no markdown fences) with this structure:
 {{
@@ -111,7 +120,7 @@ Return ONLY valid JSON (no markdown fences) with this structure:
       "priority": "high|medium|low",
       "finding": "Detailed explanation of the insight and its business implications",
       "sql": "The SQL query that produced this insight",
-      "chartCode": "<ResponsiveContainer width=\\"100%\\" height=\\"100%\\">...</ResponsiveContainer>",
+      "pythonCode": "fig = px.bar(df, x='col1', y='col2')\\nfig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', template='plotly_dark')",
       "chartTitle": "Chart title"
     }}
   ]
@@ -120,11 +129,11 @@ Return ONLY valid JSON (no markdown fences) with this structure:
 RULES:
 1. Produce 3-6 insights, sorted by business impact (high priority first)
 2. Each insight must reference actual data from the results
-3. Only include "chartCode" when the data is genuinely suitable for visualization — set to null otherwise
-4. chartCode must be a SINGLE JSX expression wrapped in <ResponsiveContainer width="100%" height="100%">
-5. Use the `data` variable in chartCode — it contains the query result rows
-6. Use COLORS[i] for fill/stroke, tooltipStyle/tickStyle/axisLineStyle/gridStroke for styling
-7. Column names in dataKey props must exactly match the query result columns
+3. Only include "pythonCode" when the data is genuinely suitable for visualization — set to null otherwise
+4. pythonCode must produce a `fig` variable (a plotly Figure)
+5. Use `df` in pythonCode — it contains the query result rows as a pandas DataFrame
+6. You can transform df freely (pivot_table, melt, groupby, etc.)
+7. Column names must exactly match the query result columns
 8. Priority: "high" = actionable/critical, "medium" = notable patterns, "low" = informational
 9. Return raw JSON only, no markdown code blocks"""
 
@@ -180,7 +189,6 @@ def parse_plan_response(raw: str) -> dict:
         parsed = _extract_json_object(text)
 
     if not isinstance(parsed, dict):
-        # Try to find a JSON array pattern for queries
         match = re.search(r"\[.*\]", text, re.DOTALL)
         if match:
             try:
@@ -192,7 +200,6 @@ def parse_plan_response(raw: str) -> dict:
         return dict(FALLBACK_PLAN)
 
     queries = parsed.get("queries")
-    # If "queries" key is missing, look for any list-valued key
     if not isinstance(queries, list):
         for key, val in parsed.items():
             if isinstance(val, list) and len(val) > 0 and isinstance(val[0], dict):
@@ -282,9 +289,9 @@ def parse_insights_response(raw: str) -> dict:
             "sql": item.get("sql", ""),
         }
 
-        chart_code = item.get("chartCode")
-        if isinstance(chart_code, str) and chart_code.strip():
-            entry["chartCode"] = chart_code
+        python_code = item.get("pythonCode")
+        if isinstance(python_code, str) and python_code.strip():
+            entry["pythonCode"] = python_code
             chart_title = item.get("chartTitle")
             if isinstance(chart_title, str) and chart_title.strip():
                 entry["chartTitle"] = chart_title
@@ -292,6 +299,29 @@ def parse_insights_response(raw: str) -> dict:
         valid.append(entry)
 
     return {"summary": summary, "insights": valid}
+
+
+def execute_plot_code(python_code: str, df: pd.DataFrame) -> dict:
+    """Execute LLM-generated Python code in a restricted sandbox and return Plotly JSON."""
+    allowed_globals = {
+        "__builtins__": {},
+        "pd": pd,
+        "px": px,
+        "go": go,
+        "df": df,
+        "print": lambda *a, **k: None,
+    }
+
+    exec(python_code, allowed_globals)
+
+    fig = allowed_globals.get("fig")
+    if fig is None:
+        raise ValueError("Code did not produce a `fig` variable")
+
+    if not isinstance(fig, go.Figure):
+        raise ValueError(f"fig is not a plotly Figure (got {type(fig).__name__})")
+
+    return json.loads(fig.to_json())
 
 
 def call_openrouter(system_prompt: str, user_message: str, max_tokens: int = 1024) -> str:
@@ -382,6 +412,35 @@ class handler(BaseHTTPRequestHandler):
         print(f"[insights] synthesize raw LLM response ({len(raw)} chars): {raw[:500]}", file=sys.stderr)
         result = parse_insights_response(raw)
         print(f"[insights] synthesize parsed: {len(result.get('insights', []))} insights", file=sys.stderr)
+
+        # Execute Python code for each insight that has it
+        for insight in result.get("insights", []):
+            python_code = insight.pop("pythonCode", None)
+            if python_code:
+                try:
+                    # Build a DataFrame from the query result rows
+                    query_result = insight.get("queryResult")
+                    if query_result and query_result.get("rows"):
+                        df = pd.DataFrame(query_result["rows"])
+                    else:
+                        # Find the matching plan item to get its result data
+                        matching_result = None
+                        for item in plan_with_results:
+                            if item.get("sql") == insight.get("sql") and item.get("result"):
+                                matching_result = item["result"]
+                                break
+                        if matching_result and matching_result.get("rows"):
+                            df = pd.DataFrame(matching_result["rows"])
+                            insight["queryResult"] = matching_result
+                        else:
+                            continue
+
+                    plotly_spec = execute_plot_code(python_code, df)
+                    insight["plotlySpec"] = plotly_spec
+                except Exception as e:
+                    print(f"[insights] exec error for insight '{insight.get('title', '?')}': {traceback.format_exc()}", file=sys.stderr)
+                    # Non-critical: just skip the chart
+
         self._send_json(200, result)
 
     def _send_json(self, status: int, data: dict):

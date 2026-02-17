@@ -46,7 +46,7 @@ export async function requestVisualization(
   sql: string,
   columns: string[],
   rows: Record<string, unknown>[]
-): Promise<{ chartCode: string | null; chartTitle: string }> {
+): Promise<{ plotlySpec: Record<string, unknown> | null; chartTitle: string }> {
   // Cap rows to first 50 before sending
   const cappedRows = rows.slice(0, 50);
 
@@ -58,15 +58,15 @@ export async function requestVisualization(
 
   if (!res.ok) {
     console.warn("[visualize] request failed:", res.status, await res.text().catch(() => ""));
-    return { chartCode: null, chartTitle: "" };
+    return { plotlySpec: null, chartTitle: "" };
   }
 
   const json = await res.json();
-  const chartCode = typeof json.chartCode === "string" ? json.chartCode : null;
+  const plotlySpec = typeof json.plotlySpec === "object" && json.plotlySpec !== null ? json.plotlySpec : null;
   const chartTitle = typeof json.chartTitle === "string" ? json.chartTitle : "Chart";
 
-  if (!chartCode) {
-    console.warn("[visualize] no chart code returned:", JSON.stringify(json));
+  if (!plotlySpec) {
+    console.warn("[visualize] no plotly spec returned:", JSON.stringify(json));
   }
-  return { chartCode, chartTitle };
+  return { plotlySpec, chartTitle };
 }

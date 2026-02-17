@@ -67,7 +67,7 @@ export function ChatContainer({ schema }: ChatContainerProps) {
 
         let queryResult: QueryResult | undefined;
         let queryError: string | undefined;
-        let chartCode: string | undefined;
+        let plotlySpec: Record<string, unknown> | undefined;
         let chartTitle: string | undefined;
 
         if (llmResponse.sql) {
@@ -87,8 +87,8 @@ export function ChatContainer({ schema }: ChatContainerProps) {
                 queryResult.columns,
                 queryResult.rows
               );
-              if (viz.chartCode) {
-                chartCode = viz.chartCode;
+              if (viz.plotlySpec) {
+                plotlySpec = viz.plotlySpec;
                 chartTitle = viz.chartTitle;
               }
             } catch {
@@ -104,7 +104,7 @@ export function ChatContainer({ schema }: ChatContainerProps) {
                   ...m,
                   content: llmResponse.explanation,
                   sql: llmResponse.sql,
-                  chartCode,
+                  plotlySpec,
                   chartTitle,
                   queryResult,
                   error: queryError,
