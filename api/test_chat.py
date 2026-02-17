@@ -33,6 +33,15 @@ class TestBuildSystemPrompt:
         assert "RULES:" in prompt
         assert "SELECT" in prompt
 
+    def test_describes_both_response_formats(self):
+        prompt = build_system_prompt(SAMPLE_SCHEMA)
+        assert '"type": "sql"' in prompt
+        assert '"type": "chat"' in prompt
+
+    def test_instructs_conversational_replies(self):
+        prompt = build_system_prompt(SAMPLE_SCHEMA)
+        assert "conversationally" in prompt.lower() or "casual" in prompt.lower()
+
 
 class TestParseLLMResponse:
     def test_valid_json(self):
@@ -95,3 +104,39 @@ class TestParseLLMResponse:
         result = parse_llm_response("")
         assert result["sql"] == ""
         assert result["chart"] is None
+
+    def test_chat_type_response(self):
+        raw = json.dumps({"type": "chat", "message": "Hello! How can I help you today?"})
+        result = parse_llm_response(raw)
+        assert result["sql"] == ""
+        assert result["explanation"] == "Hello! How can I help you today?"
+        assert result["chart"] is None
+
+    def test_chat_type_with_empty_message_returns_fallback(self):
+        raw = json.dumps({"type": "chat", "message": ""})
+        result = parse_llm_response(raw)
+        assert result["sql"] == ""
+        assert "couldn't generate" in result["explanation"].lower()
+
+    def test_message_without_type_treated_as_chat(self):
+        raw = json.dumps({"message": "That's great!"})
+        result = parse_llm_response(raw)
+        assert result["sql"] == ""
+        assert result["explanation"] == "That's great!"
+        assert result["chart"] is None
+
+    def test_sql_type_response(self):
+        raw = json.dumps({
+            "type": "sql",
+            "sql": "SELECT * FROM sales",
+            "explanation": "Fetching all sales",
+        })
+        result = parse_llm_response(raw)
+        assert result["sql"] == "SELECT * FROM sales"
+        assert result["explanation"] == "Fetching all sales"
+
+    def test_chat_response_in_markdown_fence(self):
+        raw = '```json\n{"type": "chat", "message": "You\'re welcome!"}\n```'
+        result = parse_llm_response(raw)
+        assert result["sql"] == ""
+        assert result["explanation"] == "You're welcome!"

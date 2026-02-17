@@ -27,7 +27,9 @@ def build_system_prompt(schema: dict) -> str:
         sample_lines.append(f"| {vals} |")
     sample_rows = "\n".join(sample_lines)
 
-    return f"""You are a SQL analyst. You write DuckDB-compatible SQL queries.
+    return f"""You are a friendly data analyst assistant. You can have natural conversations AND write DuckDB-compatible SQL queries.
+
+You have access to this dataset:
 
 TABLE: {schema['tableName']}
 TOTAL ROWS: {schema.get('rowCount', 'unknown')}
@@ -38,15 +40,26 @@ SAMPLE ROWS:
 | {header} |
 {sample_rows}
 
+RESPONSE FORMAT:
+Always return valid JSON (no markdown code blocks). Use one of these two formats:
+
+1. When the user asks a data question (queries, analysis, aggregations, filters, etc.):
+{{"type": "sql", "sql": "SELECT ...", "explanation": "...", "chart": {{"type": "bar", "xKey": "...", "yKey": "...", "title": "..."}}}}
+
+2. When the user is chatting (greetings, reactions, follow-up clarifications, thanks, etc.):
+{{"type": "chat", "message": "your friendly response here"}}
+
 RULES:
-1. Return ONLY valid JSON with keys: sql, explanation, chart (optional)
-2. Use only SELECT statements (no INSERT/UPDATE/DELETE/DROP)
-3. Always query from "{schema['tableName']}"
-4. For chart, specify: type (bar|line|pie|area), xKey, yKey, title
-5. Only suggest a chart when the data is suitable for visualization (aggregations, comparisons, trends)
-6. Keep SQL concise and readable
-7. Limit results to 100 rows max unless the user asks for more
-8. Do NOT wrap the JSON in markdown code blocks — return raw JSON only"""
+1. Only generate SQL when the user is clearly asking a data question
+2. For casual messages (hi, wow, thanks, ok, etc.), respond conversationally — do NOT generate SQL
+3. Use only SELECT statements (no INSERT/UPDATE/DELETE/DROP)
+4. Always query from "{schema['tableName']}"
+5. For chart, specify: type (bar|line|pie|area), xKey, yKey, title
+6. Only suggest a chart when the data is suitable for visualization (aggregations, comparisons, trends)
+7. Keep SQL concise and readable
+8. Limit results to 100 rows max unless the user asks for more
+9. Use conversation history to understand follow-up questions (e.g. "break that down by month" refers to the previous query)
+10. Do NOT wrap the JSON in markdown code blocks — return raw JSON only"""
 
 
 def parse_llm_response(raw: str) -> dict:
@@ -79,6 +92,15 @@ def parse_llm_response(raw: str) -> dict:
                 pass
 
     if not isinstance(parsed, dict):
+        return dict(FALLBACK_RESPONSE)
+
+    # Handle chat-type responses (conversational, no SQL)
+    if parsed.get("type") == "chat" or (
+        "message" in parsed and "sql" not in parsed
+    ):
+        message = parsed.get("message", "")
+        if isinstance(message, str) and message:
+            return {"sql": "", "explanation": message, "chart": None}
         return dict(FALLBACK_RESPONSE)
 
     # Ensure required keys with defaults
@@ -154,6 +176,9 @@ class handler(BaseHTTPRequestHandler):
             if not messages:
                 self._send_error(400, "Missing messages")
                 return
+
+            # Keep last 5 pairs (10 messages) for context window management
+            messages = messages[-10:]
 
             system_prompt = build_system_prompt(schema)
             result = call_openrouter(system_prompt, messages)

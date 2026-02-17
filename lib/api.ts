@@ -9,8 +9,12 @@ export function validateLLMResponse(data: unknown): LLMResponse {
 
   const obj = data as Record<string, unknown>;
 
+  // Default sql to empty string for chat-only responses
+  if (obj.sql === undefined || obj.sql === null) {
+    obj.sql = "";
+  }
   if (typeof obj.sql !== "string") {
-    throw new Error("Invalid response: missing or invalid 'sql' field");
+    throw new Error("Invalid response: invalid 'sql' field");
   }
 
   if (typeof obj.explanation !== "string") {
