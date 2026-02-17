@@ -471,35 +471,54 @@ class handler(BaseHTTPRequestHandler):
         raw = call_openrouter(system_prompt, "Synthesize the query results into prioritized business insights.", max_tokens=8192)
         print(f"[insights] synthesize raw LLM response ({len(raw)} chars): {raw[:500]}", file=sys.stderr)
         result = parse_insights_response(raw)
-        print(f"[insights] synthesize parsed: {len(result.get('insights', []))} insights", file=sys.stderr)
+        n_with_code = sum(1 for i in result.get("insights", []) if i.get("pythonCode"))
+        print(f"[insights] synthesize parsed: {len(result.get('insights', []))} insights ({n_with_code} with pythonCode)", file=sys.stderr)
+
+        # Build a lookup of plan results by SQL (normalized) and by index
+        def _normalize_sql(s: str) -> str:
+            return " ".join(s.lower().split())
+
+        plan_results_by_sql: dict[str, dict] = {}
+        plan_results_list: list[dict] = []
+        for item in plan_with_results:
+            if item.get("result") and item["result"].get("rows"):
+                plan_results_by_sql[_normalize_sql(item["sql"])] = item["result"]
+                plan_results_list.append(item["result"])
 
         # Execute Python code for each insight that has it
-        for insight in result.get("insights", []):
+        for idx, insight in enumerate(result.get("insights", [])):
             python_code = insight.pop("pythonCode", None)
-            if python_code:
-                try:
-                    # Build a DataFrame from the query result rows
-                    query_result = insight.get("queryResult")
-                    if query_result and query_result.get("rows"):
-                        df = pd.DataFrame(query_result["rows"])
-                    else:
-                        # Find the matching plan item to get its result data
-                        matching_result = None
-                        for item in plan_with_results:
-                            if item.get("sql") == insight.get("sql") and item.get("result"):
-                                matching_result = item["result"]
-                                break
-                        if matching_result and matching_result.get("rows"):
-                            df = pd.DataFrame(matching_result["rows"])
-                            insight["queryResult"] = matching_result
-                        else:
-                            continue
+            if not python_code:
+                continue
 
-                    plotly_spec = execute_plot_code(python_code, df)
-                    insight["plotlySpec"] = plotly_spec
-                except Exception as e:
-                    print(f"[insights] exec error for insight '{insight.get('title', '?')}': {traceback.format_exc()}", file=sys.stderr)
-                    # Non-critical: just skip the chart
+            try:
+                # Try exact match first, then normalized match, then index fallback
+                insight_sql = insight.get("sql", "")
+                query_result = plan_results_by_sql.get(_normalize_sql(insight_sql))
+
+                if not query_result:
+                    # Fuzzy: find plan item whose SQL is a substring or contains insight SQL
+                    norm_insight = _normalize_sql(insight_sql)
+                    for plan_sql, plan_result in plan_results_by_sql.items():
+                        if norm_insight in plan_sql or plan_sql in norm_insight:
+                            query_result = plan_result
+                            break
+
+                if not query_result and idx < len(plan_results_list):
+                    # Last resort: use positional index
+                    query_result = plan_results_list[idx]
+
+                if not query_result or not query_result.get("rows"):
+                    print(f"[insights] no data found for insight '{insight.get('title', '?')}', skipping chart", file=sys.stderr)
+                    continue
+
+                df = pd.DataFrame(query_result["rows"])
+                plotly_spec = execute_plot_code(python_code, df)
+                insight["plotlySpec"] = plotly_spec
+                print(f"[insights] chart generated for insight '{insight.get('title', '?')}'", file=sys.stderr)
+            except Exception as e:
+                print(f"[insights] exec error for insight '{insight.get('title', '?')}': {traceback.format_exc()}", file=sys.stderr)
+                # Non-critical: just skip the chart
 
         self._send_json(200, result)
 
