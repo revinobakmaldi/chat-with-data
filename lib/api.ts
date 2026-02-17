@@ -91,10 +91,14 @@ export async function requestVisualization(
   });
 
   if (!res.ok) {
-    // Non-critical — chart generation failure shouldn't break the flow
+    console.warn("[visualize] request failed:", res.status, await res.text().catch(() => ""));
     return null;
   }
 
   const json = await res.json();
-  return validateChartSpec(json.chart);
+  const spec = validateChartSpec(json.chart);
+  if (!spec) {
+    console.warn("[visualize] no valid chart spec returned:", JSON.stringify(json));
+  }
+  return spec;
 }

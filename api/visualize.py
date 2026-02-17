@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler
 import json
 import os
 import re
+import sys
 import urllib.request
 
 VALID_CHART_TYPES = {"bar", "line", "pie", "area", "scatter"}
@@ -163,7 +164,9 @@ class handler(BaseHTTPRequestHandler):
 
             system_prompt = build_visualize_prompt(question, sql, columns, rows)
             raw = call_openrouter(system_prompt, "Generate a chart specification for these query results.")
+            print(f"[visualize] raw LLM response ({len(raw)} chars): {raw[:500]}", file=sys.stderr)
             result = parse_visualize_response(raw)
+            print(f"[visualize] parsed result: chart={'present' if result.get('chart') else 'null'}", file=sys.stderr)
 
             self._send_json(200, result)
 

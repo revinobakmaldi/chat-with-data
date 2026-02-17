@@ -2,12 +2,19 @@
   "functions": {
     "api/insights.py": {
       "maxDuration": 60
+    },
+    "api/visualize.py": {
+      "maxDuration": 30
     }
   },
   "rewrites": [
     {
       "source": "/api/chat",
       "destination": "/api/chat"
+    },
+    {
+      "source": "/api/visualize",
+      "destination": "/api/visualize"
     }
   ]
 }
