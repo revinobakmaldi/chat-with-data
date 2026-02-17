@@ -1,51 +1,1001 @@
-id,name,department,salary,hire_date,performance_score,city
-1,Alice Johnson,Engineering,95000,2019-03-15,4.5,San Francisco
-2,Bob Smith,Marketing,72000,2020-07-01,3.8,New York
-3,Carol Williams,Engineering,105000,2018-01-10,4.7,San Francisco
-4,David Brown,Sales,68000,2021-05-20,3.5,Chicago
-5,Eva Martinez,Engineering,98000,2019-11-03,4.2,Austin
-6,Frank Lee,Marketing,75000,2020-02-14,4.0,New York
-7,Grace Kim,HR,65000,2021-08-22,3.9,Chicago
-8,Henry Chen,Engineering,112000,2017-06-30,4.8,San Francisco
-9,Iris Patel,Sales,71000,2020-09-15,3.6,Austin
-10,Jack Wilson,Marketing,78000,2019-04-01,4.1,New York
-11,Karen Davis,Engineering,99000,2018-12-05,4.4,San Francisco
-12,Leo Garcia,Sales,73000,2021-01-18,3.7,Chicago
-13,Mia Thompson,HR,67000,2020-06-10,4.0,New York
-14,Noah Anderson,Engineering,108000,2017-09-25,4.6,Austin
-15,Olivia Taylor,Marketing,76000,2019-08-12,3.9,San Francisco
-16,Paul Robinson,Sales,69000,2021-03-07,3.4,Chicago
-17,Quinn Harris,Engineering,101000,2018-07-20,4.3,Austin
-18,Rachel Clark,HR,63000,2022-01-05,3.8,New York
-19,Sam Lewis,Marketing,80000,2019-10-30,4.2,San Francisco
-20,Tina Walker,Engineering,95000,2020-04-18,4.1,Chicago
-21,Uma Young,Sales,74000,2021-06-14,3.6,Austin
-22,Victor Hall,Engineering,110000,2017-11-08,4.7,San Francisco
-23,Wendy Allen,HR,66000,2020-12-01,3.9,New York
-24,Xavier King,Marketing,77000,2019-02-28,4.0,Chicago
-25,Yara Wright,Engineering,103000,2018-05-15,4.5,Austin
-26,Zach Scott,Sales,70000,2021-09-22,3.5,San Francisco
-27,Amy Green,Engineering,97000,2019-07-08,4.3,New York
-28,Ben Adams,Marketing,74000,2020-03-25,3.8,Chicago
-29,Cara Baker,HR,68000,2021-11-10,4.1,Austin
-30,Dan Nelson,Engineering,106000,2018-02-14,4.6,San Francisco
-31,Elle Carter,Sales,72000,2020-08-05,3.7,New York
-32,Finn Mitchell,Engineering,100000,2019-01-20,4.4,Chicago
-33,Gina Perez,Marketing,79000,2020-05-12,4.0,Austin
-34,Hugo Roberts,Sales,67000,2021-07-30,3.3,San Francisco
-35,Ivy Turner,Engineering,104000,2018-10-18,4.5,New York
-36,Jake Phillips,HR,64000,2022-02-01,3.7,Chicago
-37,Kara Campbell,Engineering,99000,2019-06-25,4.2,Austin
-38,Luke Parker,Marketing,76000,2020-01-08,3.9,San Francisco
-39,Maya Evans,Sales,71000,2021-04-15,3.6,New York
-40,Nate Edwards,Engineering,107000,2018-08-30,4.6,Chicago
-41,Olga Collins,HR,65000,2020-10-20,4.0,Austin
-42,Pete Stewart,Engineering,96000,2019-12-12,4.1,San Francisco
-43,Rosa Sanchez,Marketing,81000,2019-09-05,4.3,New York
-44,Sean Morris,Sales,73000,2021-02-28,3.5,Chicago
-45,Tara Rogers,Engineering,102000,2018-04-22,4.4,Austin
-46,Uri Reed,Marketing,75000,2020-07-17,3.8,San Francisco
-47,Vera Cook,HR,67000,2021-10-03,3.9,New York
-48,Will Morgan,Engineering,111000,2017-12-15,4.8,Chicago
-49,Xena Bailey,Sales,69000,2021-08-08,3.4,Austin
-50,Yuri Rivera,Engineering,98000,2019-05-20,4.2,San Francisco
+order_id,customer_age,gender,region,product_category,quantity,unit_price,discount_pct,payment_method,rating
+10001,58,Female,North,Home & Garden,1,274.96,1.3,Credit Card,4
+10002,19,Non-binary,West,Toys,2,405.67,,Debit Card,3
+10003,82,Female,North,Toys,1,303.84,29.2,Crypto,5
+10004,23,Non-binary,East,Food,5,27.68,11.6,Credit Card,5
+10005,42,Female,North,Food,2,468.64,24.4,Debit Card,3
+10006,47,Non-binary,West,Books,3,20.89,10.7,Debit Card,4
+10007,63,Female,South,Beauty,2,373.77,29.9,Cash,4
+10008,32,Male,West,Clothing,2,341.84,15.4,Crypto,4
+10009,53,Male,West,Sports,3,83.29,,PayPal,5
+10010,50,Female,West,Books,2,271.99,21.2,Credit Card,4
+10011,25,Female,North,Books,5,245.57,,Crypto,2
+10012,48,Non-binary,Central,Toys,2,346.48,16.0,PayPal,4
+10013,25,Female,North,Books,5,355.38,,Credit Card,5
+10014,22,Non-binary,East,Home & Garden,5,393.39,7.6,Credit Card,4
+10015,44,Male,West,Clothing,1,401.29,7.7,Crypto,4
+10016,35,Male,South,Clothing,47,418.83,37.1,Debit Card,4
+10017,31,Male,South,Toys,3,349.81,31.3,Cash,3
+10018,21,Male,West,Electronics,1,460.1,2.3,Crypto,3
+10019,56,Male,South,Books,5,45.58,22.6,PayPal,3
+10020,63,Female,North,Sports,26,468.19,,Crypto,5
+10021,22,Female,North,Food,1,83.08,28.1,Crypto,5
+10022,51,Non-binary,South,Clothing,2,57.98,10.9,Crypto,3
+10023,61,Female,Central,Electronics,1,141.96,,Debit Card,3
+10024,65,Female,East,Clothing,50,275.07,23.3,Debit Card,1
+10025,41,Male,West,Clothing,3,206.16,6.2,Debit Card,5
+10026,69,Male,North,Food,4,406.32,31.5,Credit Card,1
+10027,48,Female,South,Books,2,202.24,2.8,PayPal,4
+10028,61,Male,North,Sports,43,136.41,17.4,PayPal,5
+10029,25,Male,South,Toys,39,271.53,29.7,Debit Card,2
+10030,60,Non-binary,West,Sports,5,166.46,22.2,Debit Card,5
+10031,61,Female,South,Electronics,3,393.95,12.9,Cash,3
+10032,48,Female,East,Food,1,116.2,1.0,Debit Card,4
+10033,67,Non-binary,East,Toys,4,329.75,,Credit Card,3
+10034,69,Non-binary,North,Clothing,4,335.45,23.8,Cash,5
+10035,50,Non-binary,South,Home & Garden,4,127.38,30.6,Crypto,3
+10036,46,Male,South,Food,5,119.47,28.3,Credit Card,3
+10037,47,Female,South,Electronics,5,471.66,15.6,Cash,5
+10038,69,Female,North,Toys,4,336.09,29.0,Cash,5
+10039,52,Non-binary,East,Electronics,1,434.09,10.4,PayPal,3
+10040,66,Female,South,Clothing,4,30.78,9.0,Credit Card,4
+10041,66,Male,West,Home & Garden,2,61.62,18.6,PayPal,3
+10042,56,Male,Central,Clothing,7,290.02,15.0,Debit Card,4
+10043,58,Female,Central,Clothing,5,217.05,20.2,PayPal,
+10044,44,Female,East,Beauty,2,263.26,24.6,Crypto,4
+10045,70,Male,West,Clothing,3,235.03,15.2,Credit Card,3
+10046,49,Female,South,Sports,5,99.57,16.3,Crypto,4
+10047,59,Male,North,Books,4,333.66,22.1,PayPal,5
+10048,39,Female,South,Books,1,372.73,27.6,Debit Card,4
+10049,94,Non-binary,East,Clothing,2,93.82,,Crypto,1
+10050,21,Male,East,Beauty,1,237.35,7.4,Credit Card,5
+10051,25,Male,East,Electronics,2,474.82,9.9,Crypto,4
+10052,68,Non-binary,South,Beauty,43,156.16,24.4,Credit Card,3
+10053,31,Male,North,Clothing,2,346.24,1.3,PayPal,5
+10054,47,Female,West,Books,4,325.58,33.1,Credit Card,5
+10055,56,Female,North,Sports,4,249.43,1.6,Cash,4
+10056,19,Non-binary,West,Electronics,3,379.35,26.1,PayPal,4
+10057,91,Female,South,Food,3,84.61,19.8,Cash,4
+10058,47,Female,North,Toys,5,273.58,7.5,PayPal,4
+10059,46,Non-binary,North,Sports,4,19.29,32.0,Debit Card,1
+10060,44,Male,East,Clothing,37,149.47,16.6,Cash,3
+10061,53,Non-binary,East,Home & Garden,1,427.93,31.5,PayPal,3
+10062,37,Non-binary,East,Home & Garden,4,169.56,15.1,PayPal,5
+10063,33,Female,North,Beauty,30,397.23,6.1,Credit Card,5
+10064,39,Female,North,Beauty,1,329.12,18.8,PayPal,4
+10065,59,Non-binary,Central,Toys,3,380.9,1.4,Credit Card,4
+10066,36,Female,Central,Clothing,4,452.19,,Credit Card,4
+10067,27,Non-binary,West,Home & Garden,2,436.07,9.6,Crypto,4
+10068,34,Male,Central,Beauty,3,41.56,39.5,PayPal,4
+10069,34,Male,Central,Beauty,1,182.68,28.0,Credit Card,4
+10070,35,Non-binary,West,Electronics,5,451.95,9.2,PayPal,3
+10071,34,Non-binary,East,Sports,4,367.52,11.8,Cash,2
+10072,52,Female,West,Sports,4,172.66,38.5,Debit Card,3
+10073,88,Non-binary,South,Toys,1,230.12,26.9,Crypto,4
+10074,41,Female,North,Food,5,319.52,28.0,Cash,1
+10075,85,Male,North,Home & Garden,4,474.94,21.6,Crypto,3
+10076,44,Non-binary,South,Sports,1,224.47,34.2,Credit Card,4
+10077,75,Female,North,Clothing,4,322.64,0.9,PayPal,2
+10078,54,Non-binary,North,Books,2,395.38,11.1,Debit Card,4
+10079,69,Male,North,Food,2,91.25,,Cash,5
+10080,48,Non-binary,East,Beauty,20,26.47,34.7,Crypto,4
+10081,77,Female,South,Clothing,4,44.99,2.6,PayPal,4
+10082,63,Non-binary,East,Beauty,5,397.58,26.2,Crypto,3
+10083,46,Female,South,Clothing,3,131.17,27.5,Cash,5
+10084,23,Non-binary,South,Home & Garden,5,282.99,4.9,PayPal,5
+10085,77,Non-binary,South,Clothing,5,330.08,4.3,Crypto,5
+10086,54,Non-binary,Central,Electronics,5,137.39,28.1,PayPal,4
+10087,29,Female,North,Electronics,1,212.82,14.8,PayPal,4
+10088,23,Non-binary,North,Clothing,3,245.4,10.9,Crypto,4
+10089,36,Non-binary,South,Books,4,106.19,30.7,PayPal,2
+10090,49,Female,East,Books,5,404.07,,Credit Card,4
+10091,22,Non-binary,South,Toys,3,483.27,37.9,Cash,5
+10092,23,Male,South,Toys,5,158.59,13.3,Debit Card,4
+10093,51,Female,South,Home & Garden,2,102.65,30.4,Credit Card,5
+10094,49,Non-binary,South,Food,3,237.12,31.9,Crypto,4
+10095,37,Male,South,Sports,1,428.37,20.3,Cash,5
+10096,65,Non-binary,West,Food,5,479.07,32.4,PayPal,2
+10097,59,Non-binary,South,Beauty,5,185.13,15.5,PayPal,2
+10098,58,Male,East,Toys,3,330.0,34.9,PayPal,4
+10099,85,Non-binary,West,Home & Garden,5,191.46,32.5,Crypto,4
+10100,50,Female,North,Books,3,499.99,11.8,Credit Card,4
+10101,65,Female,Central,Home & Garden,5,94.52,25.0,Debit Card,1
+10102,83,Non-binary,South,Beauty,2,482.97,36.2,Debit Card,5
+10103,46,Female,East,Toys,2,73.51,25.6,PayPal,2
+10104,72,Female,North,Home & Garden,34,77.94,37.9,Debit Card,5
+10105,19,Non-binary,South,Toys,1,162.75,28.6,PayPal,2
+10106,36,Male,West,Beauty,4,44.22,33.4,Crypto,4
+10107,45,Male,South,Electronics,2,313.29,,Cash,1
+10108,50,Male,South,Electronics,5,211.2,3.4,PayPal,4
+10109,50,Female,Central,Electronics,4,13.04,13.8,Credit Card,5
+10110,39,Non-binary,South,Home & Garden,4,95.23,28.6,Cash,
+10111,30,Male,South,Sports,31,273.8,30.1,Debit Card,5
+10112,21,Female,South,Toys,4,97.47,14.7,Crypto,2
+10113,45,Male,East,Food,1,151.34,28.7,Debit Card,4
+10114,20,Female,South,Electronics,1,184.84,27.2,Credit Card,4
+10115,68,Male,North,Food,30,21.03,18.0,PayPal,5
+10116,54,Female,South,Sports,2,97.09,36.5,Credit Card,3
+10117,82,Female,West,Beauty,2,41.66,28.5,Credit Card,5
+10118,38,Non-binary,East,Sports,2,397.88,4.9,Debit Card,3
+10119,49,Non-binary,South,Home & Garden,5,202.09,19.1,Cash,5
+10120,80,Non-binary,North,Beauty,5,415.38,23.5,Debit Card,5
+10121,21,Female,North,Food,28,261.85,3.2,Debit Card,4
+10122,26,Male,East,Home & Garden,5,331.07,24.2,Crypto,
+10123,73,Non-binary,West,Sports,2,321.3,25.1,PayPal,3
+10124,33,Male,West,Home & Garden,4,105.99,12.5,PayPal,5
+10125,43,Non-binary,East,Food,2,227.55,2.0,Cash,4
+10126,73,Non-binary,West,Books,37,236.07,19.9,Credit Card,4
+10127,33,Male,North,Beauty,5,146.45,,Credit Card,5
+10128,64,Female,North,Electronics,5,278.85,,Crypto,4
+10129,70,Male,North,Clothing,4,172.85,30.2,Debit Card,4
+10130,20,Non-binary,South,Beauty,5,447.1,37.3,PayPal,5
+10131,65,Non-binary,West,Beauty,5,13.24,4.4,Cash,5
+10132,64,Female,Central,Books,1,264.5,31.0,Cash,4
+10133,20,Male,North,Beauty,3,346.8,31.0,Cash,5
+10134,21,Non-binary,South,Beauty,5,90.73,13.7,PayPal,5
+10135,61,Male,Central,Sports,5,486.59,11.6,Debit Card,4
+10136,48,Non-binary,South,Clothing,5,448.4,13.8,Debit Card,3
+10137,63,Female,West,Beauty,2,139.21,10.9,Credit Card,4
+10138,33,Non-binary,North,Books,1,360.09,30.8,Credit Card,5
+10139,28,Female,East,Books,3,34.29,26.1,Debit Card,5
+10140,20,Male,Central,Electronics,4,375.76,11.6,Credit Card,
+10141,54,Female,South,Beauty,2,100.44,6.5,Cash,5
+10142,18,Non-binary,West,Books,2,449.04,20.6,Credit Card,2
+10143,26,Male,North,Toys,2,477.25,28.9,Credit Card,4
+10144,33,Female,South,Toys,5,321.16,14.7,Debit Card,2
+10145,27,Non-binary,South,Beauty,5,382.12,23.8,Credit Card,4
+10146,41,Male,North,Books,5,167.42,4.6,Debit Card,4
+10147,75,Male,East,Toys,4,233.88,28.9,Cash,1
+10148,31,Female,South,Clothing,9,39.16,1.3,Cash,2
+10149,59,Female,South,Toys,4,332.59,26.1,PayPal,5
+10150,43,Male,West,Electronics,3,274.5,32.9,Debit Card,3
+10151,30,Non-binary,South,Electronics,2,299.0,26.9,Credit Card,1
+10152,46,Male,North,Sports,2,300.97,12.8,PayPal,5
+10153,51,Female,North,Home & Garden,4,486.28,26.9,Crypto,4
+10154,27,Non-binary,East,Books,3,457.8,38.7,Crypto,4
+10155,34,Male,Central,Food,1,99.29,26.9,Crypto,
+10156,22,Non-binary,West,Books,4,169.82,0.6,Debit Card,2
+10157,66,Non-binary,East,Books,4,388.88,21.3,PayPal,4
+10158,74,Non-binary,East,Food,2,27.63,29.7,Credit Card,5
+10159,55,Male,South,Toys,5,329.03,10.3,Cash,4
+10160,49,Female,North,Beauty,40,478.83,33.6,Credit Card,4
+10161,66,Non-binary,North,Home & Garden,1,189.73,26.7,Crypto,4
+10162,19,Female,North,Sports,5,407.51,32.2,Debit Card,2
+10163,27,Non-binary,South,Food,3,479.85,9.7,Debit Card,5
+10164,23,Female,South,Beauty,1,89.83,17.4,PayPal,5
+10165,24,Male,North,Beauty,8,343.79,21.7,Credit Card,5
+10166,19,Non-binary,West,Clothing,3,285.51,27.1,Crypto,5
+10167,26,Female,North,Toys,2,385.66,15.9,PayPal,
+10168,35,Female,East,Toys,4,332.03,24.7,Debit Card,2
+10169,27,Non-binary,North,Toys,3,7.57,14.4,PayPal,2
+10170,45,Non-binary,South,Electronics,1,300.48,34.5,Credit Card,4
+10171,23,Male,East,Home & Garden,4,154.06,2.5,Cash,3
+10172,68,Male,West,Beauty,5,57.95,38.0,PayPal,4
+10173,73,Female,West,Home & Garden,3,349.17,7.1,Cash,3
+10174,91,Male,South,Sports,4,284.11,21.8,Crypto,
+10175,64,Male,South,Sports,1,73.89,10.1,Debit Card,5
+10176,90,Female,East,Toys,5,182.97,21.5,Credit Card,3
+10177,60,Non-binary,North,Toys,3,53.81,29.9,Crypto,4
+10178,46,Non-binary,East,Home & Garden,3,151.24,3.4,Debit Card,3
+10179,68,Female,East,Beauty,4,27.12,0.9,PayPal,4
+10180,28,Non-binary,North,Toys,4,316.73,26.3,Cash,
+10181,57,Female,South,Books,2,405.32,,Credit Card,4
+10182,41,Male,South,Beauty,5,197.38,4.6,PayPal,4
+10183,70,Non-binary,North,Home & Garden,3,62.89,5.7,Cash,2
+10184,42,Non-binary,East,Home & Garden,5,74.45,18.0,Credit Card,5
+10185,49,Female,Central,Beauty,4,356.52,6.7,Crypto,
+10186,66,Female,North,Sports,2,387.41,20.4,Crypto,5
+10187,70,Male,West,Beauty,19,55.7,30.1,PayPal,1
+10188,34,Male,South,Clothing,2,296.02,28.4,Cash,2
+10189,31,Non-binary,South,Sports,5,489.61,22.9,Crypto,4
+10190,80,Female,Central,Sports,2,128.59,33.1,Cash,4
+10191,35,Male,East,Clothing,4,348.88,18.2,Cash,1
+10192,67,Female,East,Food,1,484.22,19.8,PayPal,3
+10193,54,Female,West,Electronics,1,419.17,,Debit Card,1
+10194,82,Male,Central,Sports,2,183.42,26.6,Debit Card,4
+10195,64,Male,West,Electronics,2,298.87,17.8,Credit Card,5
+10196,73,Female,North,Toys,1,186.94,15.3,Debit Card,4
+10197,22,Non-binary,West,Beauty,3,79.93,27.5,Debit Card,2
+10198,66,Female,South,Toys,3,324.09,24.0,Crypto,5
+10199,19,Non-binary,East,Toys,3,449.47,19.8,Credit Card,4
+10200,22,Male,Central,Food,2,286.35,27.3,Cash,5
+10201,19,Female,North,Electronics,4,357.75,16.9,Cash,4
+10202,57,Female,North,Books,2,295.29,26.0,Credit Card,4
+10203,72,Male,Central,Clothing,4,158.1,29.6,Credit Card,
+10204,26,Female,East,Sports,2,391.66,35.5,Credit Card,4
+10205,51,Non-binary,East,Beauty,4,252.31,14.7,PayPal,5
+10206,61,Non-binary,North,Electronics,2,194.57,37.2,Credit Card,5
+10207,65,Male,South,Food,3,64.1,2.1,Debit Card,5
+10208,43,Female,West,Sports,3,8.94,22.6,PayPal,3
+10209,94,Male,West,Books,6,16.84,25.4,Credit Card,1
+10210,60,Non-binary,South,Books,5,480.79,5.7,PayPal,5
+10211,75,Female,East,Clothing,5,320.42,23.7,Credit Card,5
+10212,33,Female,Central,Toys,3,120.64,5.4,Crypto,2
+10213,46,Male,East,Books,4,426.98,32.3,PayPal,4
+10214,20,Female,North,Books,3,340.21,39.6,Credit Card,5
+10215,53,Female,North,Home & Garden,1,391.58,7.9,Cash,4
+10216,59,Female,Central,Clothing,1,324.76,3.7,PayPal,5
+10217,21,Female,West,Toys,4,216.2,36.3,PayPal,5
+10218,20,Male,East,Beauty,4,48.42,16.8,Crypto,5
+10219,76,Non-binary,South,Beauty,3,197.25,12.8,Debit Card,
+10220,69,Female,East,Books,2,124.37,31.6,Credit Card,5
+10221,54,Male,North,Food,3,351.78,22.5,Crypto,5
+10222,69,Male,East,Clothing,1,14.86,13.3,Crypto,2
+10223,63,Female,North,Home & Garden,5,424.01,38.4,PayPal,4
+10224,55,Female,North,Home & Garden,46,326.34,38.7,Crypto,3
+10225,55,Non-binary,West,Home & Garden,6,474.61,39.8,Crypto,
+10226,56,Non-binary,North,Clothing,4,43.51,12.8,Credit Card,4
+10227,64,Female,North,Clothing,3,361.6,,Cash,5
+10228,74,Female,South,Toys,1,291.14,9.0,Cash,5
+10229,36,Male,North,Home & Garden,4,275.79,3.7,Crypto,5
+10230,63,Non-binary,North,Toys,2,106.75,27.9,Crypto,3
+10231,33,Non-binary,East,Beauty,2,216.66,26.5,Crypto,2
+10232,31,Male,East,Clothing,3,447.96,25.7,Cash,5
+10233,41,Female,South,Sports,2,79.81,3.9,PayPal,4
+10234,66,Male,West,Toys,5,240.04,19.1,Credit Card,5
+10235,20,Non-binary,West,Home & Garden,1,492.26,32.3,Debit Card,
+10236,23,Non-binary,North,Sports,3,280.4,34.3,Crypto,5
+10237,68,Female,North,Home & Garden,2,380.4,37.0,Crypto,5
+10238,73,Female,South,Beauty,5,90.24,24.7,Cash,
+10239,74,Male,West,Sports,3,397.86,33.7,Credit Card,3
+10240,37,Female,South,Toys,5,223.65,16.3,Cash,5
+10241,70,Male,North,Toys,2,19.33,33.3,Credit Card,4
+10242,41,Female,East,Clothing,1,299.05,34.8,Crypto,3
+10243,71,Non-binary,North,Electronics,4,288.27,34.3,Debit Card,3
+10244,44,Non-binary,North,Home & Garden,2,115.77,37.7,PayPal,4
+10245,40,Female,South,Toys,5,499.72,33.6,Crypto,4
+10246,37,Female,Central,Food,3,476.33,7.5,Crypto,5
+10247,69,Female,West,Electronics,4,212.19,1.4,Crypto,3
+10248,63,Non-binary,West,Food,5,421.12,7.2,Credit Card,5
+10249,64,Male,Central,Food,1,373.38,31.5,PayPal,4
+10250,47,Non-binary,East,Clothing,4,434.41,11.9,Credit Card,3
+10251,30,Non-binary,Central,Beauty,2,94.28,13.3,Debit Card,2
+10252,46,Male,East,Home & Garden,4,219.69,17.2,Cash,1
+10253,87,Female,West,Books,1,368.13,35.1,PayPal,4
+10254,55,Male,South,Sports,4,172.23,39.8,PayPal,4
+10255,66,Female,North,Books,2,296.9,14.7,Credit Card,4
+10256,67,Non-binary,Central,Clothing,1,211.3,21.9,Cash,3
+10257,61,Non-binary,North,Sports,5,212.32,20.5,Crypto,2
+10258,24,Male,West,Books,3,24.51,8.3,Cash,1
+10259,60,Non-binary,West,Home & Garden,1,363.17,25.8,Cash,3
+10260,47,Male,Central,Sports,3,370.58,30.3,Credit Card,
+10261,26,Female,Central,Sports,1,95.52,38.5,PayPal,4
+10262,48,Male,North,Electronics,2,297.42,27.1,Debit Card,5
+10263,57,Non-binary,Central,Home & Garden,4,208.59,,PayPal,1
+10264,73,Non-binary,West,Books,3,351.79,26.5,Debit Card,4
+10265,59,Non-binary,Central,Electronics,47,255.26,19.8,Debit Card,4
+10266,86,Male,East,Toys,4,224.87,3.5,Cash,2
+10267,49,Female,North,Electronics,44,320.58,22.5,Cash,4
+10268,21,Female,East,Beauty,3,380.86,13.7,PayPal,4
+10269,24,Female,North,Toys,1,97.83,15.7,Cash,3
+10270,39,Male,Central,Clothing,4,478.31,20.0,Crypto,4
+10271,45,Non-binary,West,Home & Garden,5,68.55,24.0,PayPal,4
+10272,56,Female,Central,Beauty,2,351.51,12.0,Crypto,5
+10273,53,Non-binary,West,Food,47,93.02,25.5,Credit Card,4
+10274,55,Non-binary,South,Sports,4,17.51,26.8,Debit Card,5
+10275,36,Male,West,Sports,2,407.94,34.7,Crypto,5
+10276,53,Non-binary,South,Electronics,4,395.12,38.6,Credit Card,
+10277,34,Female,West,Food,5,102.25,7.7,Cash,4
+10278,29,Male,South,Toys,3,84.66,0.2,Cash,3
+10279,27,Non-binary,East,Sports,4,41.08,21.0,Debit Card,5
+10280,28,Female,North,Books,2,183.59,30.1,Crypto,4
+10281,66,Female,South,Books,1,193.78,4.5,PayPal,3
+10282,51,Non-binary,South,Electronics,3,259.38,6.7,Crypto,4
+10283,31,Female,West,Books,5,371.98,32.7,Credit Card,3
+10284,47,Male,North,Sports,5,117.68,15.5,Cash,1
+10285,61,Non-binary,West,Clothing,5,40.93,4.2,PayPal,3
+10286,46,Non-binary,North,Home & Garden,5,198.54,21.8,Debit Card,5
+10287,87,Male,East,Home & Garden,1,300.34,37.9,PayPal,5
+10288,64,Non-binary,Central,Home & Garden,2,418.2,7.3,Crypto,5
+10289,53,Male,South,Clothing,3,292.39,14.3,Debit Card,4
+10290,75,Female,South,Sports,5,185.42,17.1,Credit Card,5
+10291,63,Female,North,Food,4,388.51,4.4,Crypto,3
+10292,70,Male,South,Clothing,1,317.66,23.2,Crypto,1
+10293,34,Non-binary,East,Home & Garden,3,387.21,11.6,Cash,2
+10294,41,Male,West,Home & Garden,5,93.68,26.4,Debit Card,4
+10295,40,Female,North,Sports,3,107.35,14.5,Cash,5
+10296,20,Non-binary,East,Sports,3,91.06,14.6,Credit Card,4
+10297,32,Female,East,Beauty,5,73.79,3.1,PayPal,3
+10298,41,Male,West,Toys,3,242.01,6.4,Cash,
+10299,20,Male,North,Electronics,5,132.84,38.3,Crypto,4
+10300,74,Male,South,Beauty,4,208.33,23.3,Debit Card,4
+10301,28,Non-binary,East,Books,4,13.2,36.4,Cash,4
+10302,29,Non-binary,North,Clothing,1,451.48,0.0,Cash,4
+10303,20,Female,West,Toys,3,454.39,23.0,Cash,4
+10304,32,Non-binary,South,Books,1,63.33,,Debit Card,3
+10305,41,Non-binary,East,Sports,5,307.88,15.9,Debit Card,5
+10306,48,Non-binary,East,Sports,5,202.07,34.6,Credit Card,4
+10307,62,Non-binary,South,Food,5,354.86,38.6,Credit Card,5
+10308,48,Male,South,Food,1,195.24,24.6,Crypto,5
+10309,21,Female,North,Sports,2,257.72,24.6,Credit Card,4
+10310,78,Female,South,Toys,4,12.61,36.8,Crypto,5
+10311,55,Female,North,Books,4,134.25,4.3,Credit Card,3
+10312,92,Non-binary,West,Sports,4,386.13,38.4,Cash,5
+10313,73,Female,North,Books,2,179.78,28.0,PayPal,2
+10314,61,Male,East,Food,2,473.82,36.4,Cash,3
+10315,33,Male,West,Food,2,43.85,19.7,Credit Card,4
+10316,20,Female,East,Sports,17,458.42,8.9,Crypto,4
+10317,45,Male,East,Toys,35,350.63,27.6,Credit Card,4
+10318,24,Female,North,Sports,2,308.48,20.0,Debit Card,5
+10319,41,Male,East,Books,1,279.89,7.8,Debit Card,1
+10320,44,Non-binary,East,Food,4,429.96,,Credit Card,2
+10321,70,Non-binary,North,Food,3,280.96,13.8,Cash,5
+10322,56,Non-binary,East,Home & Garden,3,257.67,17.9,Credit Card,3
+10323,58,Non-binary,West,Food,4,205.36,3.2,PayPal,3
+10324,36,Female,South,Beauty,3,227.89,34.2,Debit Card,4
+10325,65,Female,North,Clothing,4,386.61,39.8,Credit Card,3
+10326,59,Male,West,Beauty,2,89.45,,PayPal,3
+10327,90,Non-binary,Central,Beauty,2,297.46,30.0,Crypto,4
+10328,52,Female,East,Clothing,4,133.6,0.0,Debit Card,4
+10329,18,Female,South,Toys,3,8.57,16.5,Crypto,3
+10330,63,Male,South,Toys,2,455.43,27.4,PayPal,4
+10331,35,Male,North,Sports,1,229.12,19.7,PayPal,
+10332,21,Male,South,Home & Garden,4,79.59,13.7,PayPal,4
+10333,41,Male,South,Home & Garden,1,40.34,7.7,PayPal,5
+10334,25,Female,North,Electronics,2,51.51,8.3,Cash,3
+10335,38,Male,West,Clothing,3,103.37,34.5,Debit Card,3
+10336,45,Female,East,Toys,6,292.63,27.5,Debit Card,2
+10337,28,Non-binary,South,Electronics,1,352.16,5.0,Debit Card,4
+10338,59,Female,West,Electronics,4,129.09,,Cash,4
+10339,49,Non-binary,South,Beauty,44,279.49,,Debit Card,5
+10340,52,Non-binary,East,Home & Garden,1,389.13,28.8,Crypto,3
+10341,61,Male,East,Food,4,52.65,1.8,Debit Card,1
+10342,24,Male,East,Toys,4,297.2,,Debit Card,2
+10343,31,Male,East,Electronics,3,445.76,31.8,Credit Card,3
+10344,20,Male,Central,Clothing,1,98.78,10.0,Debit Card,4
+10345,65,Non-binary,South,Beauty,4,94.3,13.5,Debit Card,4
+10346,40,Female,West,Toys,4,283.76,30.6,PayPal,4
+10347,43,Female,East,Home & Garden,3,114.83,0.9,PayPal,4
+10348,54,Male,East,Home & Garden,2,293.17,32.4,Credit Card,4
+10349,31,Female,North,Clothing,5,366.74,3.1,Credit Card,3
+10350,74,Male,Central,Books,5,317.94,,Crypto,
+10351,52,Non-binary,West,Home & Garden,1,199.48,23.8,Crypto,4
+10352,68,Female,North,Electronics,5,202.27,27.9,Debit Card,3
+10353,43,Non-binary,Central,Books,2,217.88,23.0,Credit Card,4
+10354,40,Non-binary,West,Sports,2,495.13,5.8,Credit Card,3
+10355,61,Non-binary,Central,Clothing,21,463.73,32.8,Credit Card,5
+10356,37,Female,North,Books,2,133.04,29.2,Debit Card,4
+10357,42,Non-binary,North,Home & Garden,1,349.78,18.6,Credit Card,4
+10358,60,Male,South,Toys,2,356.3,19.4,Crypto,3
+10359,50,Non-binary,North,Books,5,199.73,13.9,PayPal,3
+10360,50,Non-binary,South,Toys,41,116.66,15.7,Debit Card,4
+10361,61,Non-binary,North,Books,5,159.63,18.0,Debit Card,2
+10362,52,Female,West,Home & Garden,4,284.6,2.7,Crypto,2
+10363,38,Female,Central,Toys,4,467.22,37.3,PayPal,3
+10364,26,Non-binary,East,Books,5,17.91,,Cash,5
+10365,48,Female,East,Home & Garden,2,207.25,37.0,Cash,4
+10366,30,Female,Central,Beauty,3,216.64,24.3,Cash,4
+10367,65,Non-binary,East,Electronics,5,414.37,,Debit Card,4
+10368,65,Non-binary,West,Electronics,2,442.78,11.4,Debit Card,4
+10369,21,Female,West,Beauty,1,390.47,27.8,Debit Card,3
+10370,19,Non-binary,Central,Beauty,1,326.05,6.6,Credit Card,5
+10371,58,Non-binary,South,Home & Garden,4,385.29,22.6,Debit Card,2
+10372,67,Female,West,Beauty,3,449.78,0.1,PayPal,
+10373,49,Male,East,Beauty,2,240.48,3.2,Crypto,
+10374,74,Non-binary,East,Books,1,328.37,,Credit Card,5
+10375,37,Male,North,Home & Garden,2,332.16,22.9,Crypto,4
+10376,55,Male,West,Food,3,380.43,2.6,Cash,4
+10377,35,Non-binary,North,Books,5,366.22,39.5,Cash,4
+10378,68,Female,South,Food,2,262.25,19.7,Debit Card,3
+10379,36,Male,East,Clothing,45,209.95,22.4,Debit Card,
+10380,30,Male,South,Food,1,173.97,24.6,Credit Card,3
+10381,71,Female,Central,Electronics,2,233.01,35.8,Cash,4
+10382,65,Female,East,Food,5,290.81,36.6,PayPal,2
+10383,71,Female,East,Home & Garden,5,299.62,30.1,PayPal,3
+10384,23,Female,East,Sports,2,60.55,31.1,Credit Card,1
+10385,48,Female,Central,Sports,3,53.63,20.6,Debit Card,1
+10386,42,Female,Central,Clothing,3,56.04,29.8,Credit Card,3
+10387,75,Male,South,Food,4,78.91,0.6,Crypto,2
+10388,52,Female,North,Sports,5,159.13,21.6,Credit Card,4
+10389,61,Male,North,Toys,2,316.59,17.8,PayPal,5
+10390,63,Female,East,Clothing,4,343.82,18.6,Debit Card,2
+10391,75,Female,South,Food,3,37.36,19.1,Debit Card,3
+10392,54,Female,West,Clothing,3,397.25,16.0,Cash,3
+10393,28,Female,North,Toys,4,274.54,26.5,Credit Card,5
+10394,71,Non-binary,East,Clothing,4,205.87,27.4,Crypto,4
+10395,49,Male,Central,Electronics,2,267.97,23.1,Debit Card,5
+10396,37,Non-binary,South,Toys,3,307.69,33.9,PayPal,5
+10397,21,Female,North,Sports,1,297.13,28.5,Cash,4
+10398,60,Male,East,Food,4,437.0,0.5,Credit Card,5
+10399,89,Male,North,Toys,4,215.72,20.4,Crypto,4
+10400,32,Male,East,Books,5,275.35,39.1,Crypto,4
+10401,91,Male,North,Sports,4,445.51,18.9,Credit Card,4
+10402,55,Female,East,Electronics,4,237.27,16.8,PayPal,1
+10403,56,Non-binary,South,Beauty,5,329.88,29.5,Credit Card,2
+10404,50,Female,South,Sports,3,60.22,23.7,Debit Card,4
+10405,29,Male,East,Electronics,11,299.79,33.5,Cash,3
+10406,46,Non-binary,West,Electronics,3,234.69,19.1,Crypto,4
+10407,42,Non-binary,Central,Electronics,3,161.27,38.2,Credit Card,4
+10408,72,Non-binary,Central,Food,3,131.4,18.4,Debit Card,4
+10409,30,Non-binary,Central,Food,5,416.69,,Credit Card,4
+10410,40,Female,North,Electronics,5,299.1,8.7,Crypto,5
+10411,25,Male,South,Home & Garden,1,150.81,3.0,Cash,3
+10412,45,Male,South,Electronics,4,34.73,10.6,Cash,5
+10413,30,Non-binary,East,Home & Garden,5,323.45,28.6,Credit Card,
+10414,22,Female,North,Beauty,2,466.78,10.7,PayPal,4
+10415,50,Female,West,Clothing,5,477.31,19.3,Crypto,5
+10416,39,Non-binary,Central,Clothing,3,173.33,30.4,PayPal,3
+10417,20,Female,West,Clothing,3,318.23,5.6,Debit Card,
+10418,55,Male,West,Sports,40,406.83,0.7,PayPal,5
+10419,20,Non-binary,West,Beauty,5,120.33,,Debit Card,1
+10420,57,Non-binary,North,Home & Garden,1,53.16,33.4,Credit Card,2
+10421,49,Male,North,Books,4,491.19,13.0,Crypto,3
+10422,68,Non-binary,North,Clothing,1,210.5,22.1,Cash,4
+10423,26,Non-binary,East,Home & Garden,1,8.58,28.3,Crypto,4
+10424,69,Male,North,Sports,5,469.35,1.5,Debit Card,4
+10425,23,Male,East,Books,39,311.37,39.5,Crypto,5
+10426,60,Male,North,Home & Garden,4,336.72,,PayPal,4
+10427,39,Female,North,Electronics,5,19.39,2.8,Debit Card,4
+10428,38,Non-binary,Central,Books,1,122.37,8.0,Debit Card,4
+10429,21,Non-binary,East,Toys,3,101.11,10.8,PayPal,4
+10430,21,Female,East,Home & Garden,3,303.8,25.5,Crypto,4
+10431,53,Non-binary,East,Books,5,143.19,29.4,Debit Card,4
+10432,32,Non-binary,Central,Toys,8,368.07,17.0,Cash,5
+10433,70,Male,North,Electronics,4,151.42,3.6,Cash,3
+10434,47,Male,Central,Beauty,2,436.42,28.2,Credit Card,2
+10435,75,Female,South,Sports,5,107.54,24.8,PayPal,2
+10436,61,Male,South,Beauty,5,91.76,2.7,Debit Card,3
+10437,52,Non-binary,Central,Books,2,137.34,11.1,Credit Card,4
+10438,50,Female,West,Sports,4,338.29,39.1,Credit Card,5
+10439,23,Male,South,Clothing,1,350.06,35.0,Crypto,1
+10440,44,Female,South,Beauty,1,15.91,33.4,Crypto,4
+10441,39,Non-binary,West,Beauty,4,449.65,31.6,Debit Card,5
+10442,67,Female,East,Home & Garden,5,146.2,33.6,Debit Card,2
+10443,38,Female,South,Books,5,489.12,17.9,Debit Card,2
+10444,19,Male,Central,Food,6,275.34,25.9,PayPal,3
+10445,66,Non-binary,West,Beauty,3,242.1,,Crypto,1
+10446,57,Male,South,Books,5,468.15,0.9,Crypto,4
+10447,23,Female,South,Electronics,3,427.63,14.9,PayPal,3
+10448,46,Non-binary,Central,Toys,4,365.36,29.1,Cash,4
+10449,23,Female,Central,Food,1,48.78,36.6,Cash,4
+10450,54,Female,South,Beauty,1,155.44,18.5,Credit Card,3
+10451,37,Non-binary,Central,Toys,37,324.17,,PayPal,5
+10452,56,Non-binary,South,Sports,4,189.74,0.7,PayPal,2
+10453,38,Male,South,Electronics,3,456.49,11.6,Crypto,2
+10454,30,Non-binary,West,Food,3,139.37,14.5,Crypto,5
+10455,18,Female,West,Toys,3,81.5,7.5,Crypto,5
+10456,51,Non-binary,West,Clothing,35,62.7,0.7,PayPal,4
+10457,70,Non-binary,East,Food,2,408.21,34.3,Debit Card,3
+10458,80,Female,West,Clothing,1,379.88,,Credit Card,
+10459,60,Female,North,Sports,1,10.08,5.0,Crypto,5
+10460,29,Male,West,Sports,5,428.29,24.5,Crypto,2
+10461,55,Non-binary,North,Sports,2,364.05,36.8,Cash,4
+10462,46,Female,Central,Toys,2,60.86,4.9,Credit Card,4
+10463,41,Male,North,Beauty,1,302.19,39.0,Cash,4
+10464,72,Male,Central,Beauty,3,338.71,15.9,Crypto,2
+10465,27,Non-binary,Central,Home & Garden,29,172.62,39.6,Credit Card,4
+10466,49,Non-binary,East,Toys,3,475.32,20.5,Debit Card,2
+10467,34,Non-binary,Central,Electronics,1,251.58,,Debit Card,4
+10468,27,Male,West,Beauty,4,251.46,21.7,Crypto,5
+10469,20,Male,South,Food,4,21.27,34.4,PayPal,3
+10470,45,Female,East,Clothing,5,279.12,18.8,Crypto,4
+10471,43,Female,East,Food,3,297.28,14.7,Crypto,
+10472,75,Female,South,Food,4,125.89,12.5,Credit Card,2
+10473,37,Male,East,Electronics,4,286.18,10.7,Cash,5
+10474,42,Non-binary,North,Beauty,1,171.3,30.6,PayPal,3
+10475,45,Male,West,Books,3,498.13,9.0,Credit Card,4
+10476,55,Non-binary,West,Beauty,4,42.95,20.2,PayPal,4
+10477,30,Non-binary,East,Home & Garden,1,432.04,8.5,Cash,4
+10478,69,Female,Central,Electronics,5,78.13,27.4,PayPal,4
+10479,73,Female,South,Sports,2,121.88,6.0,Credit Card,5
+10480,47,Female,South,Electronics,2,19.43,11.1,Crypto,5
+10481,64,Male,Central,Clothing,3,36.47,35.9,Credit Card,5
+10482,71,Non-binary,West,Clothing,5,475.09,10.1,Credit Card,2
+10483,69,Non-binary,West,Books,4,91.7,17.6,PayPal,2
+10484,52,Male,South,Toys,4,142.48,5.8,Cash,5
+10485,19,Non-binary,West,Electronics,2,158.09,14.5,Credit Card,3
+10486,46,Female,Central,Sports,11,379.55,34.4,Debit Card,4
+10487,74,Female,Central,Beauty,32,169.7,36.7,Credit Card,4
+10488,50,Non-binary,West,Food,4,30.79,25.2,Debit Card,
+10489,30,Male,North,Books,5,424.25,31.7,PayPal,5
+10490,26,Non-binary,West,Sports,2,95.04,37.8,Crypto,5
+10491,53,Male,Central,Books,3,29.64,24.0,Debit Card,4
+10492,54,Non-binary,South,Beauty,4,105.56,32.5,PayPal,4
+10493,26,Non-binary,North,Sports,2,397.27,,PayPal,4
+10494,33,Non-binary,East,Electronics,4,487.33,8.5,Cash,5
+10495,34,Male,North,Books,28,469.96,23.9,Credit Card,
+10496,50,Female,West,Home & Garden,5,133.84,37.2,Cash,3
+10497,51,Male,South,Home & Garden,4,463.49,35.1,Crypto,5
+10498,51,Male,South,Beauty,2,330.42,2.1,Debit Card,3
+10499,48,Female,South,Beauty,1,355.97,19.7,Debit Card,2
+10500,73,Male,West,Sports,5,293.86,21.0,Crypto,5
+10501,33,Female,North,Clothing,4,475.85,6.2,Credit Card,5
+10502,48,Female,East,Electronics,3,475.69,29.3,Crypto,5
+10503,69,Male,West,Toys,1,123.84,16.0,Credit Card,3
+10504,67,Non-binary,North,Sports,4,461.24,24.1,PayPal,5
+10505,50,Female,East,Toys,1,308.86,17.0,Credit Card,5
+10506,61,Non-binary,North,Beauty,5,46.57,3.2,Cash,5
+10507,61,Non-binary,South,Electronics,10,259.14,16.5,Cash,4
+10508,34,Male,West,Electronics,1,394.16,1.8,Cash,3
+10509,55,Female,East,Sports,3,43.72,10.4,Credit Card,1
+10510,43,Non-binary,East,Toys,5,407.5,27.6,Cash,2
+10511,26,Male,West,Books,1,76.85,33.7,Crypto,3
+10512,47,Male,North,Home & Garden,4,430.6,8.1,Crypto,4
+10513,39,Non-binary,South,Toys,4,279.38,19.5,Cash,5
+10514,61,Male,East,Toys,5,137.59,35.6,Credit Card,5
+10515,40,Male,North,Books,4,256.28,27.4,Crypto,5
+10516,47,Non-binary,West,Toys,3,423.04,11.3,Credit Card,2
+10517,30,Male,West,Beauty,3,28.29,,PayPal,3
+10518,70,Male,South,Clothing,5,115.93,13.6,PayPal,5
+10519,53,Non-binary,Central,Clothing,1,481.51,39.0,Crypto,5
+10520,24,Male,North,Clothing,2,149.6,20.2,Credit Card,4
+10521,70,Male,South,Toys,1,239.46,6.9,PayPal,5
+10522,41,Non-binary,South,Books,2,207.61,34.1,PayPal,4
+10523,67,Non-binary,Central,Clothing,3,387.32,15.7,Credit Card,4
+10524,75,Non-binary,Central,Sports,4,351.89,28.9,PayPal,1
+10525,35,Male,West,Beauty,2,311.0,13.8,Cash,5
+10526,23,Female,West,Home & Garden,5,50.95,20.9,Debit Card,
+10527,74,Male,West,Sports,4,34.67,25.1,PayPal,5
+10528,25,Non-binary,North,Food,2,447.7,21.3,Crypto,3
+10529,60,Non-binary,South,Books,1,100.31,18.2,Debit Card,5
+10530,23,Male,East,Beauty,1,204.36,31.2,PayPal,4
+10531,46,Female,West,Home & Garden,5,231.57,20.5,Crypto,3
+10532,48,Non-binary,South,Clothing,5,187.95,20.9,Credit Card,5
+10533,37,Male,North,Toys,1,111.71,19.6,Credit Card,2
+10534,20,Female,East,Food,4,417.67,5.5,Cash,4
+10535,27,Non-binary,West,Toys,20,172.8,,Cash,4
+10536,73,Non-binary,East,Sports,5,281.88,24.7,Crypto,5
+10537,51,Non-binary,Central,Clothing,17,141.11,33.2,Crypto,5
+10538,56,Male,East,Electronics,3,16.91,15.3,Credit Card,2
+10539,28,Female,West,Home & Garden,3,34.16,7.3,Credit Card,2
+10540,27,Female,South,Clothing,1,300.52,20.3,Crypto,2
+10541,21,Female,North,Electronics,4,443.65,38.5,Credit Card,4
+10542,68,Female,South,Books,2,88.25,38.1,Crypto,1
+10543,47,Male,North,Beauty,3,341.6,33.7,Debit Card,4
+10544,20,Non-binary,North,Clothing,4,74.13,11.2,Cash,4
+10545,69,Female,East,Beauty,3,164.21,38.4,PayPal,
+10546,62,Male,East,Electronics,1,280.12,19.6,Cash,5
+10547,59,Non-binary,South,Clothing,3,182.19,30.7,Credit Card,4
+10548,30,Non-binary,North,Sports,3,308.65,28.7,Debit Card,5
+10549,20,Non-binary,West,Books,18,321.03,11.1,Crypto,4
+10550,60,Non-binary,East,Clothing,5,68.08,34.2,Crypto,3
+10551,76,Non-binary,West,Sports,5,216.42,26.0,PayPal,5
+10552,35,Female,East,Electronics,2,212.93,0.2,Debit Card,5
+10553,76,Male,Central,Toys,1,167.97,,Credit Card,
+10554,45,Non-binary,Central,Sports,2,479.61,32.9,Crypto,5
+10555,67,Male,East,Clothing,9,191.81,27.7,Debit Card,5
+10556,21,Female,North,Electronics,5,193.82,30.1,Debit Card,5
+10557,57,Female,West,Clothing,47,392.55,13.1,Debit Card,1
+10558,63,Male,Central,Home & Garden,5,243.29,7.4,Debit Card,2
+10559,37,Non-binary,West,Sports,5,77.97,13.7,PayPal,4
+10560,60,Non-binary,West,Electronics,4,104.18,31.4,PayPal,4
+10561,62,Female,Central,Food,5,85.33,31.6,Credit Card,5
+10562,58,Female,East,Books,4,191.08,33.0,Credit Card,2
+10563,19,Female,South,Food,1,145.63,10.5,Debit Card,4
+10564,29,Female,Central,Electronics,2,443.08,8.4,Cash,5
+10565,60,Non-binary,Central,Clothing,1,69.74,21.3,PayPal,4
+10566,58,Non-binary,East,Sports,2,316.58,5.1,Crypto,5
+10567,31,Non-binary,East,Home & Garden,5,324.31,19.9,Cash,5
+10568,51,Female,East,Toys,5,113.67,34.5,Cash,4
+10569,42,Female,South,Clothing,2,261.82,1.6,Crypto,4
+10570,47,Female,South,Toys,1,136.48,,Credit Card,4
+10571,52,Male,North,Clothing,3,170.21,10.0,PayPal,4
+10572,26,Male,West,Sports,31,411.82,0.5,Crypto,5
+10573,73,Non-binary,West,Beauty,2,278.54,32.6,PayPal,3
+10574,30,Non-binary,South,Beauty,4,73.78,12.2,Credit Card,4
+10575,40,Female,West,Toys,5,16.5,36.9,Debit Card,5
+10576,54,Non-binary,Central,Toys,2,196.28,13.2,Cash,3
+10577,28,Male,North,Beauty,1,456.12,8.2,PayPal,2
+10578,21,Male,South,Toys,16,68.92,29.7,Cash,5
+10579,26,Non-binary,West,Home & Garden,42,295.81,27.4,PayPal,5
+10580,46,Non-binary,West,Food,5,290.19,11.5,Cash,5
+10581,68,Male,South,Home & Garden,5,455.86,22.7,Cash,1
+10582,74,Non-binary,East,Clothing,2,382.12,14.7,Credit Card,5
+10583,44,Male,East,Beauty,1,339.43,13.7,Cash,4
+10584,18,Male,South,Beauty,4,276.47,38.0,Debit Card,3
+10585,28,Non-binary,North,Sports,1,88.38,0.4,PayPal,4
+10586,31,Non-binary,North,Electronics,5,331.72,27.6,Cash,1
+10587,67,Male,South,Books,2,18.83,,Debit Card,2
+10588,74,Non-binary,North,Home & Garden,1,408.73,25.1,Crypto,4
+10589,45,Male,South,Home & Garden,1,10.93,8.8,PayPal,4
+10590,22,Non-binary,East,Clothing,5,479.72,39.3,Cash,5
+10591,62,Non-binary,West,Food,4,306.22,15.3,Debit Card,5
+10592,18,Male,South,Toys,2,73.09,8.1,Cash,1
+10593,95,Female,West,Food,2,394.55,,Cash,3
+10594,19,Female,South,Books,9,334.18,27.5,Debit Card,4
+10595,38,Male,North,Beauty,1,496.05,5.0,Debit Card,5
+10596,31,Female,West,Sports,2,92.34,11.4,Cash,3
+10597,73,Female,South,Home & Garden,4,306.65,6.2,Cash,
+10598,42,Female,East,Home & Garden,5,234.51,15.0,Crypto,3
+10599,63,Male,North,Food,31,470.44,14.9,Cash,5
+10600,22,Male,South,Home & Garden,33,386.78,13.9,Cash,4
+10601,21,Non-binary,North,Beauty,1,339.83,25.8,PayPal,5
+10602,27,Non-binary,Central,Home & Garden,1,323.98,15.9,Crypto,2
+10603,30,Female,South,Sports,5,194.48,16.5,Credit Card,4
+10604,69,Female,West,Toys,6,409.11,,Credit Card,4
+10605,44,Male,North,Home & Garden,2,253.79,22.7,Debit Card,2
+10606,29,Female,South,Clothing,2,191.98,13.7,Crypto,4
+10607,66,Female,West,Electronics,5,263.56,,Crypto,5
+10608,35,Female,East,Food,3,499.73,37.6,Cash,2
+10609,40,Male,East,Toys,2,435.16,28.0,Debit Card,4
+10610,60,Non-binary,North,Food,1,27.65,13.0,Cash,4
+10611,65,Female,South,Beauty,1,101.56,20.8,Crypto,5
+10612,20,Male,South,Beauty,34,243.67,9.7,Debit Card,4
+10613,23,Non-binary,North,Food,4,132.53,35.9,Credit Card,5
+10614,58,Non-binary,South,Books,5,174.9,29.7,Cash,5
+10615,72,Male,South,Sports,1,371.59,29.8,Credit Card,2
+10616,38,Male,South,Books,4,185.69,31.9,Crypto,4
+10617,24,Female,South,Sports,2,77.98,29.9,Credit Card,3
+10618,62,Non-binary,East,Books,4,191.47,13.3,Debit Card,5
+10619,32,Male,Central,Toys,48,83.8,,Cash,4
+10620,40,Non-binary,West,Sports,2,199.92,30.1,Crypto,2
+10621,63,Male,East,Beauty,4,108.83,7.8,Credit Card,5
+10622,24,Female,West,Home & Garden,1,239.57,4.7,Crypto,4
+10623,27,Male,North,Beauty,3,90.38,31.0,Credit Card,5
+10624,59,Non-binary,South,Electronics,1,247.16,20.4,Credit Card,5
+10625,48,Male,West,Home & Garden,36,352.85,5.0,PayPal,5
+10626,68,Non-binary,North,Beauty,1,271.8,26.1,Debit Card,5
+10627,29,Male,East,Food,1,107.08,22.5,Credit Card,2
+10628,87,Male,South,Electronics,2,473.17,11.7,Crypto,4
+10629,62,Female,East,Books,1,122.36,12.0,Debit Card,4
+10630,31,Male,West,Toys,1,193.98,16.0,Credit Card,4
+10631,62,Male,East,Sports,2,325.65,6.6,Debit Card,5
+10632,76,Male,North,Clothing,5,206.36,3.6,PayPal,2
+10633,69,Male,South,Books,4,66.13,35.0,Crypto,4
+10634,51,Female,East,Clothing,1,377.18,32.2,Crypto,5
+10635,43,Female,North,Home & Garden,2,369.03,,PayPal,3
+10636,56,Male,South,Food,4,476.55,28.7,Debit Card,5
+10637,37,Male,East,Clothing,2,33.42,22.2,Cash,1
+10638,45,Male,East,Clothing,4,455.89,28.6,Crypto,3
+10639,65,Male,East,Home & Garden,5,186.69,14.1,Credit Card,4
+10640,41,Non-binary,North,Clothing,3,136.05,,Crypto,5
+10641,59,Male,Central,Beauty,1,232.88,4.3,PayPal,3
+10642,40,Female,North,Home & Garden,13,8.42,10.0,Cash,3
+10643,45,Female,North,Beauty,4,374.81,,Debit Card,3
+10644,26,Female,Central,Home & Garden,36,491.55,19.6,Cash,5
+10645,38,Non-binary,West,Toys,13,397.39,13.8,Credit Card,3
+10646,61,Non-binary,West,Toys,4,45.89,24.7,Crypto,3
+10647,84,Male,West,Toys,2,405.93,20.1,Debit Card,5
+10648,58,Male,South,Sports,2,310.15,2.0,Cash,5
+10649,32,Female,North,Toys,1,184.97,28.5,Debit Card,1
+10650,20,Non-binary,South,Sports,23,54.88,37.9,PayPal,2
+10651,60,Male,South,Food,5,122.93,23.4,Credit Card,2
+10652,65,Non-binary,Central,Books,34,42.07,13.7,Cash,3
+10653,64,Male,South,Sports,5,227.0,36.4,Credit Card,4
+10654,50,Female,West,Home & Garden,8,35.09,7.6,Cash,4
+10655,50,Non-binary,South,Toys,4,96.11,8.7,Credit Card,5
+10656,47,Non-binary,South,Books,3,89.7,,Debit Card,4
+10657,74,Female,Central,Electronics,2,5.69,24.2,PayPal,5
+10658,74,Male,South,Sports,3,10.15,29.2,PayPal,5
+10659,52,Non-binary,West,Sports,5,223.88,8.2,Cash,3
+10660,64,Female,North,Home & Garden,4,92.17,37.7,Debit Card,1
+10661,28,Non-binary,East,Clothing,2,230.24,16.1,Crypto,5
+10662,18,Female,North,Electronics,1,46.38,25.1,Credit Card,1
+10663,68,Female,Central,Clothing,2,283.61,6.5,PayPal,3
+10664,52,Male,North,Electronics,1,258.21,5.7,Debit Card,
+10665,45,Non-binary,South,Toys,1,59.52,38.2,PayPal,3
+10666,41,Non-binary,North,Toys,5,341.32,26.7,PayPal,3
+10667,74,Female,West,Sports,1,489.13,5.9,Debit Card,5
+10668,68,Male,East,Sports,2,68.13,14.1,Cash,4
+10669,44,Female,North,Books,4,271.68,21.4,Debit Card,4
+10670,44,Non-binary,West,Books,1,105.62,14.5,Cash,5
+10671,21,Male,South,Home & Garden,5,414.77,,Debit Card,4
+10672,27,Non-binary,Central,Food,1,292.9,23.8,Debit Card,
+10673,41,Male,North,Toys,2,74.36,38.0,Cash,3
+10674,68,Male,North,Electronics,5,10.38,27.2,Cash,5
+10675,54,Male,South,Home & Garden,3,489.07,8.5,Crypto,4
+10676,70,Male,West,Beauty,4,205.52,2.2,PayPal,3
+10677,24,Non-binary,West,Food,1,273.08,,Crypto,
+10678,37,Non-binary,Central,Books,11,284.57,31.6,Credit Card,
+10679,23,Female,West,Toys,5,198.37,5.2,Credit Card,5
+10680,50,Male,North,Toys,4,23.52,27.3,Credit Card,2
+10681,63,Non-binary,West,Home & Garden,39,306.33,30.7,Cash,3
+10682,41,Female,North,Toys,19,305.4,22.7,Cash,1
+10683,67,Male,East,Beauty,16,84.93,14.5,Credit Card,5
+10684,84,Female,West,Beauty,13,246.69,11.5,Cash,5
+10685,26,Non-binary,Central,Food,1,227.8,39.6,Credit Card,4
+10686,65,Non-binary,North,Clothing,3,202.64,,Cash,4
+10687,40,Non-binary,Central,Beauty,1,58.63,15.9,Cash,3
+10688,86,Female,North,Beauty,1,274.82,5.8,Debit Card,1
+10689,56,Female,West,Beauty,2,16.36,16.9,PayPal,2
+10690,22,Female,Central,Beauty,4,447.07,2.1,Cash,5
+10691,28,Female,East,Home & Garden,28,287.31,22.4,Crypto,5
+10692,55,Non-binary,Central,Food,1,467.24,12.7,Cash,5
+10693,46,Non-binary,Central,Clothing,1,97.89,31.0,Crypto,3
+10694,94,Female,West,Electronics,3,434.54,26.0,Cash,4
+10695,71,Female,North,Home & Garden,4,278.61,17.4,PayPal,4
+10696,45,Male,Central,Clothing,1,466.59,30.0,Crypto,2
+10697,46,Male,West,Toys,2,278.04,34.3,Credit Card,5
+10698,47,Non-binary,West,Toys,1,256.24,26.3,PayPal,5
+10699,44,Female,North,Electronics,2,261.89,12.7,Debit Card,5
+10700,93,Male,East,Toys,1,470.0,29.1,Cash,4
+10701,45,Male,East,Toys,3,164.59,1.0,Credit Card,4
+10702,19,Male,East,Electronics,2,389.91,26.1,Debit Card,4
+10703,33,Non-binary,North,Clothing,2,492.47,4.4,Crypto,2
+10704,34,Female,West,Books,4,15.87,,Credit Card,4
+10705,74,Female,West,Home & Garden,6,331.53,34.2,Credit Card,5
+10706,48,Male,North,Sports,1,270.3,30.4,Debit Card,2
+10707,31,Male,North,Home & Garden,3,476.85,22.1,PayPal,5
+10708,45,Male,South,Books,3,397.61,6.6,Debit Card,4
+10709,74,Non-binary,South,Food,5,217.51,15.0,Credit Card,5
+10710,50,Female,East,Food,4,405.48,7.4,Debit Card,4
+10711,41,Male,North,Electronics,3,398.64,22.5,Cash,3
+10712,31,Non-binary,East,Clothing,5,379.32,12.8,Debit Card,
+10713,49,Female,South,Clothing,4,297.63,0.9,Credit Card,5
+10714,18,Female,North,Electronics,3,237.6,16.6,PayPal,5
+10715,43,Female,East,Electronics,4,230.02,38.7,Credit Card,5
+10716,24,Male,North,Food,4,99.62,14.8,Crypto,5
+10717,73,Male,North,Sports,1,308.31,10.8,Debit Card,4
+10718,25,Male,West,Toys,4,266.16,26.5,PayPal,5
+10719,32,Female,West,Food,5,368.96,3.1,Cash,1
+10720,31,Male,East,Food,2,259.39,37.8,Cash,5
+10721,24,Female,South,Beauty,5,203.1,,Cash,3
+10722,73,Male,East,Clothing,1,233.12,19.0,Crypto,3
+10723,53,Male,North,Toys,5,139.93,25.9,Cash,3
+10724,29,Non-binary,East,Toys,1,128.23,4.6,Credit Card,3
+10725,52,Non-binary,West,Toys,4,368.29,10.7,Debit Card,3
+10726,58,Female,West,Clothing,38,312.95,34.1,Debit Card,4
+10727,28,Female,North,Electronics,4,92.87,3.1,Credit Card,5
+10728,55,Male,East,Electronics,1,148.88,20.1,Debit Card,2
+10729,69,Non-binary,South,Sports,4,11.71,28.4,Crypto,5
+10730,75,Female,West,Electronics,2,331.39,19.9,Debit Card,4
+10731,45,Male,North,Toys,1,341.01,18.0,Crypto,5
+10732,40,Female,Central,Sports,3,262.44,24.5,Cash,4
+10733,68,Male,East,Home & Garden,4,483.5,26.6,PayPal,2
+10734,36,Male,South,Clothing,1,218.01,0.0,PayPal,5
+10735,68,Non-binary,North,Clothing,15,102.38,3.2,Debit Card,
+10736,40,Non-binary,South,Toys,22,300.53,17.4,PayPal,2
+10737,67,Female,East,Sports,3,463.92,7.3,Cash,4
+10738,62,Non-binary,West,Beauty,3,480.92,36.5,Credit Card,4
+10739,66,Female,West,Food,2,284.96,30.2,Cash,4
+10740,47,Male,North,Sports,1,411.86,27.6,Credit Card,4
+10741,50,Non-binary,North,Beauty,2,321.64,25.1,Credit Card,4
+10742,30,Male,East,Clothing,5,56.29,,Crypto,2
+10743,25,Male,West,Sports,5,330.79,5.8,Credit Card,5
+10744,60,Non-binary,West,Books,4,335.43,19.7,PayPal,4
+10745,24,Female,North,Sports,4,10.45,25.8,Crypto,5
+10746,40,Non-binary,East,Electronics,2,431.21,36.1,Crypto,2
+10747,59,Non-binary,East,Beauty,2,330.93,2.7,Cash,4
+10748,60,Non-binary,West,Sports,2,477.82,24.7,Cash,1
+10749,64,Non-binary,North,Beauty,20,405.23,9.5,Debit Card,4
+10750,44,Female,North,Clothing,4,421.14,12.8,Cash,5
+10751,54,Female,East,Sports,2,219.86,31.6,Credit Card,4
+10752,60,Male,Central,Food,4,40.62,29.2,Crypto,5
+10753,54,Female,East,Home & Garden,1,191.18,,Credit Card,4
+10754,24,Male,East,Food,1,148.5,15.6,PayPal,5
+10755,36,Male,Central,Sports,4,350.27,18.8,PayPal,1
+10756,44,Male,North,Food,1,403.8,24.4,Credit Card,2
+10757,44,Male,Central,Beauty,2,56.51,9.0,PayPal,3
+10758,72,Male,North,Books,5,342.56,22.1,Credit Card,4
+10759,26,Non-binary,North,Beauty,45,187.02,17.5,Credit Card,2
+10760,18,Non-binary,East,Electronics,2,67.72,1.7,PayPal,5
+10761,36,Female,West,Clothing,22,106.9,32.5,Debit Card,3
+10762,41,Non-binary,North,Sports,3,56.67,16.4,Crypto,2
+10763,26,Non-binary,East,Clothing,3,121.38,30.6,Credit Card,
+10764,71,Non-binary,South,Clothing,1,195.05,,Cash,1
+10765,31,Female,East,Sports,1,468.93,30.2,PayPal,5
+10766,69,Male,South,Toys,4,278.88,37.3,PayPal,5
+10767,47,Non-binary,West,Sports,2,496.34,36.3,PayPal,5
+10768,23,Female,South,Toys,1,138.03,26.1,Crypto,
+10769,37,Female,West,Beauty,4,235.89,19.2,Crypto,2
+10770,23,Non-binary,South,Clothing,4,394.43,19.8,Debit Card,2
+10771,57,Non-binary,North,Beauty,5,360.09,,PayPal,1
+10772,72,Male,East,Food,1,61.03,,Debit Card,4
+10773,70,Female,Central,Home & Garden,1,183.34,35.9,PayPal,5
+10774,57,Male,South,Home & Garden,5,109.68,28.6,Crypto,5
+10775,31,Male,West,Home & Garden,4,43.27,9.0,Crypto,4
+10776,64,Male,West,Electronics,5,262.57,7.8,Crypto,3
+10777,33,Female,West,Clothing,2,440.71,14.1,Crypto,4
+10778,48,Female,North,Home & Garden,5,206.77,5.5,PayPal,3
+10779,25,Non-binary,Central,Beauty,2,12.68,10.5,Crypto,4
+10780,24,Female,North,Home & Garden,1,267.01,16.9,Debit Card,4
+10781,63,Female,East,Clothing,1,180.7,16.4,Cash,4
+10782,66,Non-binary,North,Clothing,2,188.09,15.2,Cash,5
+10783,35,Female,South,Toys,3,379.86,1.7,Debit Card,3
+10784,74,Female,South,Clothing,3,115.7,37.6,PayPal,5
+10785,32,Male,East,Home & Garden,44,480.13,32.0,Credit Card,5
+10786,41,Non-binary,South,Beauty,5,151.0,28.3,Credit Card,4
+10787,34,Female,West,Clothing,3,115.11,,Debit Card,3
+10788,58,Male,West,Food,1,354.03,7.6,Crypto,5
+10789,20,Non-binary,South,Books,2,244.83,19.9,Debit Card,5
+10790,51,Male,East,Books,2,135.22,23.4,PayPal,4
+10791,29,Female,West,Beauty,4,243.07,4.5,PayPal,4
+10792,33,Female,Central,Clothing,3,68.39,33.6,Cash,4
+10793,19,Male,Central,Toys,1,134.49,15.7,Cash,3
+10794,21,Male,South,Electronics,3,288.39,8.2,Credit Card,4
+10795,39,Male,Central,Electronics,4,169.98,30.6,Credit Card,4
+10796,41,Male,West,Toys,2,455.77,8.6,Debit Card,1
+10797,19,Female,West,Electronics,2,118.85,9.9,PayPal,5
+10798,42,Non-binary,Central,Clothing,1,353.23,0.8,Crypto,3
+10799,65,Male,West,Sports,3,16.6,8.1,PayPal,4
+10800,42,Male,Central,Sports,24,268.94,0.7,Cash,5
+10801,66,Female,North,Electronics,4,241.02,12.4,Debit Card,5
+10802,24,Female,East,Clothing,2,239.39,22.7,Debit Card,4
+10803,44,Male,North,Toys,1,378.74,21.8,PayPal,3
+10804,47,Non-binary,Central,Clothing,1,190.96,6.5,Credit Card,4
+10805,25,Female,North,Beauty,2,9.58,39.8,PayPal,4
+10806,41,Male,South,Books,5,129.36,37.4,Debit Card,5
+10807,48,Male,North,Clothing,1,103.64,18.3,Credit Card,4
+10808,28,Non-binary,Central,Food,1,411.27,23.4,PayPal,5
+10809,34,Non-binary,North,Home & Garden,1,135.15,31.9,Crypto,4
+10810,54,Non-binary,Central,Beauty,2,119.76,37.2,Crypto,3
+10811,73,Male,North,Beauty,4,154.77,9.6,Cash,4
+10812,48,Non-binary,South,Clothing,19,473.02,28.5,Cash,4
+10813,68,Non-binary,Central,Food,2,428.41,13.8,Cash,4
+10814,30,Non-binary,Central,Books,4,7.78,3.8,PayPal,4
+10815,18,Non-binary,South,Beauty,8,353.61,2.3,Crypto,5
+10816,48,Female,North,Clothing,1,447.66,29.4,Debit Card,5
+10817,25,Non-binary,North,Clothing,23,101.12,0.7,PayPal,3
+10818,55,Non-binary,South,Electronics,1,253.26,3.4,Cash,
+10819,56,Female,North,Electronics,3,63.27,33.4,Credit Card,4
+10820,25,Male,North,Electronics,2,190.39,29.0,Debit Card,4
+10821,75,Non-binary,North,Electronics,4,74.51,9.0,Debit Card,3
+10822,36,Female,North,Food,5,322.7,25.2,Debit Card,
+10823,71,Non-binary,East,Toys,3,399.15,28.0,Crypto,5
+10824,35,Male,South,Beauty,8,260.93,19.0,Cash,4
+10825,42,Female,West,Food,1,170.68,4.0,PayPal,4
+10826,29,Non-binary,East,Toys,4,130.02,13.5,Cash,5
+10827,74,Non-binary,North,Toys,3,19.13,36.9,Crypto,5
+10828,30,Male,West,Electronics,1,75.02,15.8,Cash,
+10829,27,Female,South,Home & Garden,2,363.45,22.2,PayPal,
+10830,28,Non-binary,West,Books,4,234.42,36.7,Cash,5
+10831,26,Female,West,Toys,5,176.7,38.8,Credit Card,4
+10832,67,Female,East,Electronics,5,457.72,5.5,Debit Card,
+10833,37,Female,West,Toys,2,339.26,10.4,Cash,4
+10834,51,Male,South,Clothing,4,68.73,27.5,Credit Card,5
+10835,43,Female,South,Clothing,5,391.6,33.8,PayPal,3
+10836,45,Non-binary,North,Electronics,3,259.87,34.9,Cash,
+10837,36,Female,East,Electronics,5,215.72,30.7,Credit Card,3
+10838,40,Female,South,Electronics,5,23.12,9.9,Credit Card,2
+10839,27,Female,South,Beauty,21,452.27,32.8,Crypto,2
+10840,41,Non-binary,East,Clothing,38,43.99,30.0,Cash,3
+10841,65,Non-binary,Central,Toys,1,497.48,21.6,Debit Card,1
+10842,54,Female,South,Home & Garden,3,304.29,27.1,PayPal,
+10843,31,Non-binary,North,Sports,4,319.25,9.0,PayPal,4
+10844,64,Non-binary,South,Food,5,281.04,12.8,Cash,5
+10845,49,Male,West,Sports,4,287.8,,Cash,3
+10846,31,Female,West,Beauty,4,294.54,22.6,Cash,1
+10847,36,Male,South,Home & Garden,44,66.13,8.5,Credit Card,3
+10848,28,Female,West,Toys,5,184.77,35.4,PayPal,4
+10849,32,Female,South,Beauty,2,6.65,30.5,Debit Card,2
+10850,89,Female,North,Electronics,5,311.86,24.0,Cash,3
+10851,33,Female,West,Food,1,328.79,34.5,Debit Card,5
+10852,33,Non-binary,Central,Food,2,20.29,18.4,Crypto,3
+10853,29,Male,West,Food,2,481.42,,Credit Card,4
+10854,51,Male,West,Sports,5,305.45,28.6,Cash,5
+10855,36,Non-binary,West,Food,4,222.82,4.1,PayPal,4
+10856,68,Female,South,Food,2,108.99,25.7,Credit Card,5
+10857,66,Female,South,Beauty,3,286.27,30.5,Debit Card,1
+10858,74,Non-binary,South,Home & Garden,5,357.97,6.2,Debit Card,3
+10859,42,Male,Central,Sports,2,185.26,34.8,Crypto,4
+10860,28,Non-binary,Central,Food,5,463.41,34.8,Cash,5
+10861,18,Female,North,Home & Garden,3,395.69,14.3,Cash,4
+10862,18,Non-binary,North,Electronics,4,168.11,,Crypto,5
+10863,78,Male,South,Books,2,95.43,34.3,Debit Card,4
+10864,20,Female,North,Books,1,35.13,23.4,Crypto,2
+10865,74,Non-binary,North,Beauty,1,102.71,8.6,Cash,1
+10866,45,Female,West,Books,5,230.85,,Cash,4
+10867,29,Non-binary,South,Sports,3,141.27,12.4,Cash,5
+10868,29,Non-binary,East,Home & Garden,2,338.12,34.5,PayPal,4
+10869,29,Male,North,Sports,3,343.95,8.4,Debit Card,3
+10870,43,Non-binary,West,Food,5,395.43,10.8,PayPal,5
+10871,37,Female,West,Food,4,199.8,30.5,Cash,4
+10872,80,Female,North,Books,2,150.92,12.9,Cash,4
+10873,30,Female,Central,Clothing,1,362.81,23.7,Credit Card,4
+10874,63,Non-binary,East,Electronics,1,141.64,36.9,Credit Card,5
+10875,86,Non-binary,South,Home & Garden,2,104.0,9.8,Crypto,4
+10876,53,Non-binary,North,Clothing,29,225.69,7.4,Cash,4
+10877,30,Non-binary,Central,Home & Garden,1,201.17,1.9,Crypto,5
+10878,41,Male,Central,Food,5,170.21,,Credit Card,5
+10879,67,Non-binary,West,Clothing,5,496.51,30.7,Cash,4
+10880,74,Male,North,Food,4,371.03,35.6,Cash,1
+10881,71,Male,South,Home & Garden,3,385.05,26.1,Debit Card,4
+10882,40,Male,North,Home & Garden,1,472.52,,Debit Card,5
+10883,38,Non-binary,North,Sports,33,120.32,30.9,Credit Card,5
+10884,46,Female,North,Books,4,202.59,15.2,Credit Card,3
+10885,55,Male,North,Beauty,5,161.86,39.4,Crypto,3
+10886,25,Female,West,Toys,1,158.44,,PayPal,5
+10887,59,Male,Central,Sports,3,128.25,5.1,Debit Card,4
+10888,20,Male,Central,Sports,3,82.95,37.5,Debit Card,5
+10889,29,Male,West,Electronics,4,314.53,10.6,PayPal,
+10890,19,Female,North,Home & Garden,4,382.44,6.8,Credit Card,
+10891,75,Male,North,Beauty,4,270.68,24.1,Credit Card,4
+10892,75,Non-binary,East,Clothing,4,426.72,8.8,Debit Card,2
+10893,60,Non-binary,South,Clothing,2,366.36,28.4,Cash,4
+10894,54,Male,South,Food,2,426.12,32.0,Credit Card,5
+10895,18,Male,North,Food,1,429.55,34.8,Crypto,5
+10896,47,Female,North,Sports,5,446.8,32.3,Cash,4
+10897,24,Female,North,Food,4,273.94,39.0,Credit Card,5
+10898,26,Female,East,Clothing,5,470.92,7.8,Debit Card,3
+10899,65,Male,East,Electronics,5,348.38,6.7,Debit Card,3
+10900,58,Non-binary,North,Toys,2,484.73,15.6,Crypto,5
+10901,47,Female,North,Sports,5,461.91,38.4,Credit Card,2
+10902,48,Male,South,Home & Garden,4,128.04,9.1,PayPal,4
+10903,64,Male,North,Home & Garden,3,63.06,4.1,Crypto,4
+10904,37,Non-binary,East,Clothing,23,25.28,10.2,Cash,3
+10905,63,Male,East,Clothing,5,124.44,19.8,Cash,4
+10906,73,Non-binary,South,Sports,5,418.97,3.3,Credit Card,4
+10907,55,Female,West,Clothing,4,284.98,34.8,Cash,
+10908,24,Non-binary,Central,Clothing,1,337.94,16.9,Cash,1
+10909,59,Non-binary,Central,Electronics,4,218.74,8.6,Debit Card,
+10910,39,Female,West,Beauty,3,175.3,9.9,Cash,3
+10911,62,Male,North,Food,4,90.17,3.6,PayPal,5
+10912,71,Female,North,Clothing,4,321.54,8.1,Cash,5
+10913,75,Male,South,Clothing,2,255.53,11.8,Crypto,4
+10914,62,Male,West,Toys,3,268.75,36.9,Credit Card,5
+10915,74,Male,South,Books,4,81.73,1.1,Debit Card,5
+10916,33,Male,North,Sports,2,244.22,22.3,Crypto,3
+10917,51,Non-binary,Central,Toys,3,135.46,36.0,Debit Card,4
+10918,62,Non-binary,North,Home & Garden,1,270.0,33.1,Debit Card,5
+10919,59,Male,East,Electronics,4,297.58,,Debit Card,
+10920,46,Female,East,Home & Garden,1,477.59,10.1,Credit Card,4
+10921,80,Male,West,Sports,5,168.61,35.0,Cash,4
+10922,61,Male,Central,Electronics,3,488.79,21.2,Debit Card,3
+10923,56,Male,East,Beauty,1,473.34,38.0,Cash,4
+10924,48,Male,North,Food,2,252.34,16.1,Debit Card,4
+10925,23,Male,East,Electronics,9,34.28,6.7,Crypto,
+10926,38,Non-binary,East,Clothing,2,251.61,39.0,Credit Card,5
+10927,56,Female,West,Home & Garden,5,225.33,37.4,Credit Card,3
+10928,36,Male,East,Home & Garden,1,81.85,13.5,Cash,4
+10929,42,Non-binary,East,Food,2,480.39,31.8,Credit Card,5
+10930,48,Non-binary,North,Food,5,268.3,21.9,Debit Card,2
+10931,66,Non-binary,South,Toys,4,248.16,19.4,Cash,5
+10932,67,Non-binary,North,Electronics,2,295.8,21.7,PayPal,4
+10933,21,Female,Central,Electronics,4,93.25,28.0,Debit Card,5
+10934,75,Male,West,Beauty,2,12.72,8.2,Credit Card,1
+10935,86,Female,West,Food,4,301.38,10.3,Cash,5
+10936,75,Non-binary,West,Sports,4,412.66,33.7,Debit Card,4
+10937,56,Female,North,Beauty,2,39.91,6.4,Cash,4
+10938,84,Non-binary,Central,Toys,3,428.48,30.4,Cash,5
+10939,23,Male,North,Electronics,4,118.18,7.4,Credit Card,4
+10940,46,Male,West,Books,2,12.03,34.4,PayPal,4
+10941,30,Male,Central,Clothing,2,171.26,1.0,Cash,3
+10942,51,Male,East,Food,1,207.91,24.7,Debit Card,3
+10943,20,Non-binary,North,Toys,1,196.83,34.3,Credit Card,2
+10944,59,Non-binary,South,Toys,4,308.24,39.5,Cash,5
+10945,47,Male,North,Home & Garden,4,187.2,,PayPal,4
+10946,63,Female,North,Food,2,211.77,17.8,Cash,3
+10947,60,Non-binary,North,Books,2,437.44,24.8,Cash,5
+10948,44,Male,South,Beauty,1,153.66,31.0,Crypto,3
+10949,39,Non-binary,South,Toys,2,107.19,6.9,Crypto,4
+10950,54,Female,East,Home & Garden,4,382.88,25.1,Credit Card,5
+10951,23,Male,South,Clothing,3,79.55,33.6,PayPal,3
+10952,75,Non-binary,North,Sports,1,440.88,4.7,Crypto,4
+10953,58,Female,West,Books,48,455.05,1.6,Cash,4
+10954,67,Female,Central,Home & Garden,7,473.57,35.4,Credit Card,2
+10955,26,Female,Central,Clothing,2,357.15,3.3,Crypto,4
+10956,57,Male,South,Sports,2,262.61,19.6,Debit Card,3
+10957,37,Female,South,Sports,4,277.88,39.1,Crypto,
+10958,54,Male,Central,Toys,4,138.79,14.7,Crypto,5
+10959,44,Female,West,Books,4,457.11,3.4,PayPal,5
+10960,19,Male,North,Home & Garden,3,401.72,34.5,Credit Card,5
+10961,39,Non-binary,East,Beauty,3,65.38,8.0,Credit Card,5
+10962,23,Non-binary,North,Electronics,1,267.02,7.9,Cash,3
+10963,36,Male,South,Electronics,17,135.31,23.0,Debit Card,5
+10964,22,Female,West,Books,2,298.19,20.3,PayPal,3
+10965,40,Non-binary,Central,Sports,3,36.08,29.3,Crypto,4
+10966,61,Non-binary,West,Food,5,304.73,22.8,PayPal,5
+10967,48,Female,South,Books,2,346.98,35.2,PayPal,5
+10968,43,Female,East,Home & Garden,32,437.31,15.3,Debit Card,1
+10969,68,Male,North,Electronics,4,171.97,,Cash,5
+10970,72,Male,East,Beauty,33,84.11,2.4,Credit Card,3
+10971,48,Male,East,Beauty,2,478.64,13.5,PayPal,4
+10972,25,Female,South,Food,2,239.39,,PayPal,3
+10973,38,Female,East,Beauty,3,397.94,36.1,PayPal,4
+10974,32,Male,East,Beauty,1,52.31,24.9,Credit Card,4
+10975,75,Female,West,Sports,2,34.22,25.3,PayPal,4
+10976,53,Female,East,Food,5,406.31,36.9,Crypto,5
+10977,65,Non-binary,South,Toys,4,10.4,5.8,Credit Card,
+10978,59,Female,West,Home & Garden,4,82.7,12.6,PayPal,3
+10979,56,Non-binary,North,Electronics,1,278.52,12.6,Cash,4
+10980,59,Female,East,Electronics,3,286.42,2.2,Debit Card,5
+10981,26,Male,Central,Books,29,172.39,30.0,Cash,2
+10982,44,Non-binary,West,Books,4,456.16,9.6,Crypto,
+10983,59,Male,North,Books,2,164.86,26.8,Credit Card,3
+10984,19,Male,North,Electronics,2,8.54,23.3,PayPal,5
+10985,43,Male,Central,Sports,3,197.27,30.2,PayPal,3
+10986,34,Female,East,Beauty,5,386.16,4.5,Cash,5
+10987,73,Non-binary,West,Sports,2,183.66,,Debit Card,5
+10988,34,Female,North,Home & Garden,3,361.37,18.3,Cash,3
+10989,49,Female,West,Books,1,5.13,,Credit Card,5
+10990,18,Non-binary,East,Home & Garden,1,324.66,29.7,PayPal,4
+10991,19,Male,South,Sports,4,320.17,31.7,Cash,2
+10992,64,Non-binary,West,Sports,3,242.46,6.1,Credit Card,4
+10993,20,Female,South,Electronics,5,479.92,28.4,Cash,3
+10994,84,Male,North,Beauty,1,283.79,22.4,Cash,5
+10995,65,Male,East,Beauty,4,331.01,22.0,Debit Card,4
+10996,44,Female,East,Food,3,377.07,21.7,PayPal,2
+10997,34,Female,East,Beauty,5,26.16,34.4,Debit Card,4
+10998,71,Non-binary,North,Books,4,440.96,21.8,Crypto,1
+10999,53,Non-binary,West,Food,4,419.05,37.5,Crypto,4
+11000,54,Non-binary,West,Clothing,2,82.07,30.1,Credit Card,5
