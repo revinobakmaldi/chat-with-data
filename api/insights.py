@@ -366,13 +366,20 @@ class handler(BaseHTTPRequestHandler):
     def _handle_plan(self, schema: dict):
         system_prompt = build_plan_prompt(schema)
         raw = call_openrouter(system_prompt, "Analyze this dataset and create an analysis plan.", max_tokens=4096)
+        print(f"[insights] plan raw LLM response ({len(raw)} chars): {raw[:500]}", file=sys.stderr)
         result = parse_plan_response(raw)
+        print(f"[insights] plan parsed: {len(result.get('queries', []))} queries", file=sys.stderr)
         self._send_json(200, result)
 
     def _handle_synthesize(self, schema: dict, plan_with_results: list):
+        n_results = sum(1 for q in plan_with_results if q.get("result"))
+        n_errors = sum(1 for q in plan_with_results if q.get("error"))
+        print(f"[insights] synthesize input: {len(plan_with_results)} queries ({n_results} with results, {n_errors} with errors)", file=sys.stderr)
         system_prompt = build_synthesize_prompt(schema, plan_with_results)
-        raw = call_openrouter(system_prompt, "Synthesize the query results into prioritized business insights.", max_tokens=2048)
+        raw = call_openrouter(system_prompt, "Synthesize the query results into prioritized business insights.", max_tokens=4096)
+        print(f"[insights] synthesize raw LLM response ({len(raw)} chars): {raw[:500]}", file=sys.stderr)
         result = parse_insights_response(raw)
+        print(f"[insights] synthesize parsed: {len(result.get('insights', []))} insights", file=sys.stderr)
         self._send_json(200, result)
 
     def _send_json(self, status: int, data: dict):
