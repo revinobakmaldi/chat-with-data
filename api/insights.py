@@ -232,6 +232,73 @@ def parse_plan_response(raw: str) -> dict:
     return {"queries": valid}
 
 
+def _extract_summary(text: str) -> str:
+    """Extract the summary string from potentially truncated JSON."""
+    match = re.search(r'"summary"\s*:\s*"((?:[^"\\]|\\.)*)"', text)
+    if match:
+        return match.group(1)
+    return "Analysis complete."
+
+
+def _extract_insight_objects(text: str) -> list[dict]:
+    """Extract complete insight JSON objects from potentially truncated JSON.
+
+    Uses brace-counting to find each complete {...} inside the insights array,
+    so even if the response is truncated mid-array we salvage the finished items.
+    """
+    # Find the start of the insights array
+    arr_match = re.search(r'"insights"\s*:\s*\[', text)
+    if not arr_match:
+        return []
+
+    pos = arr_match.end()
+    objects = []
+
+    while pos < len(text):
+        # Skip whitespace and commas
+        while pos < len(text) and text[pos] in " \t\n\r,":
+            pos += 1
+        if pos >= len(text) or text[pos] != "{":
+            break
+
+        # Brace-count to find the matching close brace
+        depth = 0
+        in_string = False
+        escape = False
+        start = pos
+        for i in range(start, len(text)):
+            ch = text[i]
+            if escape:
+                escape = False
+                continue
+            if ch == "\\":
+                if in_string:
+                    escape = True
+                continue
+            if ch == '"' and not escape:
+                in_string = not in_string
+                continue
+            if in_string:
+                continue
+            if ch == "{":
+                depth += 1
+            elif ch == "}":
+                depth -= 1
+                if depth == 0:
+                    candidate = text[start : i + 1]
+                    try:
+                        objects.append(json.loads(candidate))
+                    except json.JSONDecodeError:
+                        pass
+                    pos = i + 1
+                    break
+        else:
+            # Reached end of text without closing brace — truncated, stop
+            break
+
+    return objects
+
+
 def parse_insights_response(raw: str) -> dict:
     text = raw.strip()
 
@@ -242,31 +309,25 @@ def parse_insights_response(raw: str) -> dict:
             lines = lines[:-1]
         text = "\n".join(lines).strip()
 
+    # Try clean parse first
     parsed = None
     try:
         parsed = json.loads(text)
     except json.JSONDecodeError:
-        match = re.search(
-            r"\{[^{}]*(?:\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}[^{}]*)*\}",
-            text,
-            re.DOTALL,
-        )
-        if match:
-            try:
-                parsed = json.loads(match.group())
-            except json.JSONDecodeError:
-                pass
+        parsed = _extract_json_object(text)
 
-    if not isinstance(parsed, dict):
-        return dict(FALLBACK_INSIGHTS)
+    # If clean parse succeeded, use the insights array directly
+    if isinstance(parsed, dict) and isinstance(parsed.get("insights"), list):
+        insights_raw = parsed["insights"]
+        summary = parsed.get("summary", "")
+    else:
+        # Truncated response: salvage what we can
+        print("[insights] JSON truncated — attempting partial extraction", file=sys.stderr)
+        summary = _extract_summary(text)
+        insights_raw = _extract_insight_objects(text)
 
-    summary = parsed.get("summary", "")
     if not isinstance(summary, str) or not summary:
         summary = "Analysis complete."
-
-    insights_raw = parsed.get("insights", [])
-    if not isinstance(insights_raw, list):
-        return {"summary": summary, "insights": []}
 
     valid_priorities = {"high", "medium", "low"}
     valid = []
@@ -408,7 +469,7 @@ class handler(BaseHTTPRequestHandler):
         n_errors = sum(1 for q in plan_with_results if q.get("error"))
         print(f"[insights] synthesize input: {len(plan_with_results)} queries ({n_results} with results, {n_errors} with errors)", file=sys.stderr)
         system_prompt = build_synthesize_prompt(schema, plan_with_results)
-        raw = call_openrouter(system_prompt, "Synthesize the query results into prioritized business insights.", max_tokens=4096)
+        raw = call_openrouter(system_prompt, "Synthesize the query results into prioritized business insights.", max_tokens=8192)
         print(f"[insights] synthesize raw LLM response ({len(raw)} chars): {raw[:500]}", file=sys.stderr)
         result = parse_insights_response(raw)
         print(f"[insights] synthesize parsed: {len(result.get('insights', []))} insights", file=sys.stderr)
