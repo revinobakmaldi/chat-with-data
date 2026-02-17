@@ -1,5 +1,37 @@
 import type { SchemaInfo, LLMResponse, ChatMessage } from "./types";
 
+const VALID_CHART_TYPES = new Set(["bar", "line", "pie", "area", "scatter", "histogram"]);
+
+export function validateLLMResponse(data: unknown): LLMResponse {
+  if (typeof data !== "object" || data === null) {
+    throw new Error("Invalid response: expected an object");
+  }
+
+  const obj = data as Record<string, unknown>;
+
+  if (typeof obj.sql !== "string") {
+    throw new Error("Invalid response: missing or invalid 'sql' field");
+  }
+
+  if (typeof obj.explanation !== "string") {
+    throw new Error("Invalid response: missing or invalid 'explanation' field");
+  }
+
+  if (obj.chart != null) {
+    const chart = obj.chart as Record<string, unknown>;
+    if (
+      typeof chart !== "object" ||
+      !VALID_CHART_TYPES.has(chart.type as string) ||
+      typeof chart.xKey !== "string" ||
+      typeof chart.yKey !== "string"
+    ) {
+      throw new Error("Invalid response: chart config is malformed");
+    }
+  }
+
+  return data as LLMResponse;
+}
+
 export async function sendChatMessage(
   schema: SchemaInfo,
   messages: Pick<ChatMessage, "role" | "content">[]
@@ -15,5 +47,6 @@ export async function sendChatMessage(
     throw new Error(error.error || `Request failed (${res.status})`);
   }
 
-  return res.json();
+  const json = await res.json();
+  return validateLLMResponse(json);
 }

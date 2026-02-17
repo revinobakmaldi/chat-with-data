@@ -52,6 +52,20 @@ const axisLineStyle = { stroke: "var(--chart-axis-line)" };
 export function DataChart({ chart, data }: DataChartProps) {
   if (!data.rows.length) return null;
 
+  const missingKeys: string[] = [];
+  if (!data.columns.includes(chart.xKey)) missingKeys.push(chart.xKey);
+  if (!data.columns.includes(chart.yKey)) missingKeys.push(chart.yKey);
+
+  if (missingKeys.length > 0) {
+    return (
+      <div className="rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950 p-4 text-sm text-amber-700 dark:text-amber-300">
+        Chart unavailable: column{missingKeys.length > 1 ? "s" : ""}{" "}
+        {missingKeys.map((k) => `"${k}"`).join(", ")}{" "}
+        not found in query results. Available columns: {data.columns.join(", ")}
+      </div>
+    );
+  }
+
   const chartData = data.rows.map((row) => {
     const entry: Record<string, unknown> = {};
     for (const col of data.columns) {

@@ -1,7 +1,16 @@
 from http.server import BaseHTTPRequestHandler
 import json
 import os
+import re
 import urllib.request
+
+VALID_CHART_TYPES = {"bar", "line", "pie", "area", "scatter", "histogram"}
+
+FALLBACK_RESPONSE = {
+    "sql": "",
+    "explanation": "I couldn't generate a valid response. Please try rephrasing your question.",
+    "chart": None,
+}
 
 
 def build_system_prompt(schema: dict) -> str:
@@ -40,6 +49,58 @@ RULES:
 8. Do NOT wrap the JSON in markdown code blocks — return raw JSON only"""
 
 
+def parse_llm_response(raw: str) -> dict:
+    """Parse and validate an LLM response string into a structured dict.
+
+    Handles markdown fences, extracts JSON blocks from surrounding text,
+    and validates required keys. Returns a fallback on total failure.
+    """
+    text = raw.strip()
+
+    # Strip markdown code fences if present
+    if text.startswith("```"):
+        lines = text.split("\n")
+        lines = lines[1:]
+        if lines and lines[-1].strip() == "```":
+            lines = lines[:-1]
+        text = "\n".join(lines).strip()
+
+    # Try direct parse first
+    parsed = None
+    try:
+        parsed = json.loads(text)
+    except json.JSONDecodeError:
+        # Try to extract first {...} block via regex
+        match = re.search(r"\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}", text, re.DOTALL)
+        if match:
+            try:
+                parsed = json.loads(match.group())
+            except json.JSONDecodeError:
+                pass
+
+    if not isinstance(parsed, dict):
+        return dict(FALLBACK_RESPONSE)
+
+    # Ensure required keys with defaults
+    if "sql" not in parsed or not isinstance(parsed.get("sql"), str):
+        parsed["sql"] = ""
+    if "explanation" not in parsed or not isinstance(parsed.get("explanation"), str):
+        parsed["explanation"] = parsed.get("explanation", "No explanation provided.")
+
+    # Validate chart config if present
+    chart = parsed.get("chart")
+    if chart is not None:
+        if (
+            not isinstance(chart, dict)
+            or chart.get("type") not in VALID_CHART_TYPES
+            or not isinstance(chart.get("xKey"), str)
+            or not isinstance(chart.get("yKey"), str)
+        ):
+            parsed["chart"] = None
+
+    return parsed
+
+
 def call_openrouter(system_prompt: str, messages: list) -> dict:
     api_key = os.environ.get("OPENROUTER_API_KEY", "")
     if not api_key:
@@ -73,18 +134,7 @@ def call_openrouter(system_prompt: str, messages: list) -> dict:
         data = json.loads(resp.read().decode("utf-8"))
 
     content = data["choices"][0]["message"]["content"]
-
-    # Strip markdown code fences if present
-    content = content.strip()
-    if content.startswith("```"):
-        lines = content.split("\n")
-        # Remove first line (```json or ```) and last line (```)
-        lines = lines[1:]
-        if lines and lines[-1].strip() == "```":
-            lines = lines[:-1]
-        content = "\n".join(lines).strip()
-
-    return json.loads(content)
+    return parse_llm_response(content)
 
 
 class handler(BaseHTTPRequestHandler):
