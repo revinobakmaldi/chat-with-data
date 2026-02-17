@@ -129,7 +129,7 @@ def call_openrouter(system_prompt: str, user_message: str) -> str:
         raise ValueError("OPENROUTER_API_KEY environment variable not set")
 
     payload = json.dumps({
-        "model": "openai/gpt-oss-120b",
+        "model": "openai/gpt-oss-120b:free",
         "messages": [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_message},
