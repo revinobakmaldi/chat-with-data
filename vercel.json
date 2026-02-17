@@ -5,6 +5,9 @@
     },
     "api/visualize.py": {
       "maxDuration": 45
+    },
+    "api/**/*.py": {
+      "excludeFiles": "{tests/**,__tests__/**,**/*.test.py,**/test_*.py}"
     }
   },
   "rewrites": [
