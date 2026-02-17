@@ -72,7 +72,6 @@ export function DynamicChart({ spec, title }: DynamicChartProps) {
       plot_bgcolor: "rgba(0,0,0,0)",
       font: { color: theme.fontColor },
       autosize: true,
-      margin: { l: 50, r: 20, t: 30, b: 50 },
       xaxis: {
         ...(restLayout.xaxis as Record<string, unknown> ?? {}),
         color: theme.fontColor,
@@ -113,7 +112,7 @@ export function DynamicChart({ spec, title }: DynamicChartProps) {
           {title}
         </h4>
       )}
-      <div className="h-64">
+      <div style={{ width: "100%", minHeight: 280, aspectRatio: "16 / 9" }}>
         <Plot
           data={data}
           layout={layout}
