@@ -107,7 +107,7 @@ export function DynamicChart({ code, data, title }: DynamicChartProps) {
       )}
       <div className="h-64">
         <LiveProvider code={code} scope={fullScope} noInline={false}>
-          <LivePreview />
+          <LivePreview Component="div" className="h-full w-full" />
           <LiveError className="text-sm text-red-500 dark:text-red-400 mt-2" />
         </LiveProvider>
       </div>
